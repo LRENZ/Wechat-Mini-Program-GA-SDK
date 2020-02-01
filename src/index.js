@@ -30,7 +30,7 @@ let b = new MP(s)
 //window.test = new MP()
 //a.get("/debug/collect",{data:{test:1}})
 //a.post("/debug/collect",{data:{test:2}})
-b.post({data:{test:3}})
+b.post({data:{tid:"UA-123456"}})
 
 //console.log(a.Interceptor)
 

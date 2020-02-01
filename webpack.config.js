@@ -5,7 +5,7 @@ module.exports = function() {
 
   return {
     mode: dev ? 'development' : 'production',
-    entry: './src/index.js',
+    entry: ['babel-polyfill','./src/index.js'],
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: dev ? 'mp.js' : 'mp.min.js',

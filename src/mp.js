@@ -1,10 +1,8 @@
 import _default from './config';
 import Interceptor from './Interceptor';
 import Request from './request';
-
-function request(){
-
-}
+import schema from './validation'
+import helper from './helper'
 
 class MP{
   constructor(options = {} ){
@@ -57,8 +55,8 @@ class MP{
     ...JSON.parse(JSON.stringify(_default)),
     ...options
   };
-
   config.url = this.getEnvURL(config)
+
     return config;
   }
 
@@ -77,6 +75,9 @@ class MP{
     ...arg[0]}
   }
 
+  let { error, value } = schema.validate(options.data);
+  console.log(error)
+  helper.Error(error)
   console.log(options)
   //console.log(arg)
   /*if (arg.length == 1 && typeof arg[0] == 'string') {

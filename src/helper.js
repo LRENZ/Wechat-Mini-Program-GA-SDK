@@ -8,8 +8,15 @@ class helpers {
   return key + '=' + obj[key];
 }).join('&');
   }
-  
+
+  Error(msg){
+    if(msg){
+      throw new Error(msg);
+    }
+  }
 }
 
+const helper = new helpers()
 
-export default helpers;
+
+export default helper;
