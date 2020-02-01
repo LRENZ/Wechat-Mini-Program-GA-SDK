@@ -1,22 +1,15 @@
-class Interceptor {
+class helpers {
   constructor() {
-    this._list = [];
-    this.use = this.u
-    this.list = this.l
-    this.remove = this.clear
+
   }
 
-  u(fn) {
-    this._list.push(fn);
+  objectToParams(obj){
+    Object.keys(obj).map(function(key) {
+  return key + '=' + obj[key];
+}).join('&');
   }
-
-  l() {
-    return this._list;
-  }
-  clear(){
-    this._list = []
-  }
+  
 }
 
 
-export default Interceptor;
+export default helpers;

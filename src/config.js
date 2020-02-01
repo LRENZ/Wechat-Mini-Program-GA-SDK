@@ -1,3 +1,4 @@
+
 const _default = {
   debug:true,
   proxyURL:'',
@@ -5,8 +6,9 @@ const _default = {
   KeepTransferRequest:false,
   KeepTransferReponse:false,
   validateHit:false,
+  maxLogLength:20,
   GAURL:"https://www.google-analytics.com/collect",
-  method: 'get',
+  method: 'POST',
   headers: {
     common: {
       'X-Request-By': 'XMLHttpRequest',
@@ -16,6 +18,8 @@ const _default = {
 
   },
   rest:'',
+  log:[]
 };
+
 
 export default _default

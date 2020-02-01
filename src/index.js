@@ -21,9 +21,18 @@ a.interceptors.request.use(function(config) {
 });
 
 
-window.test = new MP()
-a.get("/debug/collect",{data:{test:1}})
-a.post("/debug/collect",{data:{test:2}})
+let s = {
+  debug:true,
+  validateHit:true,
+  proxyURL:"https://linpiner.com/",
+}
+let b = new MP(s)
+//window.test = new MP()
+//a.get("/debug/collect",{data:{test:1}})
+//a.post("/debug/collect",{data:{test:2}})
+b.post({data:{test:3}})
 
 //console.log(a.Interceptor)
-console.log(a)
+
+window.a = a
+export default MP

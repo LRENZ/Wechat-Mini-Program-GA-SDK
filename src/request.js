@@ -1,7 +1,10 @@
-
-
-class Request{
+import Logger from './log'
+import _default from './config'
+const success = new Logger(_default)
+window.success = success
+class Request {
   constructor(){
+
   }
 
   ajax(options){
@@ -11,6 +14,7 @@ class Request{
   request(option){
     //let {url,method,data} = option
     // object to params?
+    console.log(success)
       if (String(option) !== '[object Object]') return undefined
       option.method = option.method ? option.method.toUpperCase() : 'GET'
       option.data = option.data || {}
@@ -33,13 +37,32 @@ class Request{
           if (xhr.status === 200) {
             if(transferResponse)
             {
-              option.success(transferResponse(xhr.response))
+              console.log(xhr.response)
+              success.enqueue({
+                url:option.url?option.url:option.getUrl,
+                data:option.data,
+                res:transferResponse(xhr.response),
+                //transferResponse(xhr.response)
+              })
+
             }else{
-              option.success(xhr.response)
+              success.enqueue({
+                url:option.url?option.url:option.getUrl,
+                data:option.data,
+                res:xhr.response,
+              })
+
             }
           } else {
               //this.fail()
-              option.fail()
+              success.enqueue({
+                error:"Error",
+                url:option.url?option.url:option.getUrl,
+                res:xhr.response
+                //data:option.data,
+                //transferResponse(xhr.response)
+              })
+
           }
         }
       }
@@ -59,12 +82,10 @@ class Request{
 
 
 weRequest(options){
-  if(!!wx){
-
-  }
+   console.log("test on wechat")
 }
 isonWechat(){
-  return false
+  return typeof wx == 'object'? true : false
 }
 
 send(options){

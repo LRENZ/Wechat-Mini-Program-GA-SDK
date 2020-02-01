@@ -1,6 +1,7 @@
-import _default from './config'
+import _default from './config';
 import Interceptor from './Interceptor';
-import Request from './request'
+import Request from './request';
+
 function request(){
 
 }
@@ -9,12 +10,30 @@ class MP{
   constructor(options = {} ){
     this.default = this.create(options)
    this.interceptors = {
-  request: new Interceptor(),
+    request: new Interceptor(),
   response: new Interceptor(),
 };
+
+
+  }
+
+  preSent(data){
+    //this.PreSentLogger.enqueue(data)
+  }
+
+  onSuccess(res){
+    console.log('res')
+    console.log(this)
+    //this.ResponseLogger.enqueue(res)
+  }
+
+  onError(e){
+    console.log("error")
+  //  this.errorLogger.enqueue(e)
   }
 
   get(...args){
+    console.log(this)
    let op = this._preprocessArgs("GET",args)
    if(!op){
 
@@ -33,10 +52,13 @@ class MP{
 
 
   create(options = {}){
+
     let config = {
     ...JSON.parse(JSON.stringify(_default)),
     ...options
   };
+
+  config.url = this.getEnvURL(config)
     return config;
   }
 
@@ -47,8 +69,17 @@ class MP{
   let options;
   //
   let arg = args.flat()
+  //window.arg = arg
+  if(typeof arg[0] == "object"){
+    options = {
+      method,
+      url:this.getEnvURL(this.default),
+    ...arg[0]}
+  }
+
+  console.log(options)
   //console.log(arg)
-  if (arg.length == 1 && typeof arg[0] == 'string') {
+  /*if (arg.length == 1 && typeof arg[0] == 'string') {
     options = { method, url: arg[0] };
   } else if (arg.length != 1 && arg[1].constructor == Object) {
     options = {
@@ -56,23 +87,18 @@ class MP{
       method,
       url:arg[0],
     };
-  } else {
+  } else if(arg[0].constructor == Object) {
+    options = {method, url:this.getEnvURL()}
+    return options;
+  }else{
     return undefined;
-  }
+  }*/
   return options;
 }
-preSent(fn){
 
-}
-onSuccess(fn){
-  console.log('res')
-}
-
-onError(fn){
-  console.log("error")
-}
 
 getEnvURL(config){
+  console.log(config)
   if(config.debug && config.validateHit){
     return config.GAdebugURL
   }
@@ -112,11 +138,12 @@ request(options){
 
   console.log(cog)
   window.cog = cog
-  window.res= res
-  cog.success = this.onSuccess
-  cog.fail = this.onError
+  //window.cog = cog
+  //window.res= res
+  //cog.success = this.onSuccess
+  //cog.fail = this.onError
   // 正式请求
-  return res.send(cog)
+  return res.send(cog,this.onSuccess,this.onError)
 }
 
 

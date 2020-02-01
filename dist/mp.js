@@ -181,7 +181,7 @@ var _default = {
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-/*! no exports provided */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -205,8 +205,8 @@ a.interceptors.request.use(function (config) {
   config.rest = 'true'; //alert('tt')
 
   return config;
-});
-window.test = new _mp__WEBPACK_IMPORTED_MODULE_0__["default"]();
+}); //window.test = new MP()
+
 a.get("/debug/collect", {
   data: {
     test: 1
@@ -219,6 +219,7 @@ a.post("/debug/collect", {
 }); //console.log(a.Interceptor)
 
 console.log(a);
+/* harmony default export */ __webpack_exports__["default"] = (_mp__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -383,9 +384,9 @@ function () {
       list.forEach(function (fn) {
         cog = fn(cog);
       });
-      console.log(cog);
-      window.cog = cog;
-      window.res = res;
+      console.log(cog); //window.cog = cog
+      //window.res= res
+
       cog.success = this.onSuccess;
       cog.fail = this.onError; // 正式请求
 
@@ -409,6 +410,8 @@ function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -483,12 +486,12 @@ function () {
   }, {
     key: "weRequest",
     value: function weRequest(options) {
-      if (!!wx) {}
+      console.log("test on wechat");
     }
   }, {
     key: "isonWechat",
     value: function isonWechat() {
-      return false;
+      return (typeof wx === "undefined" ? "undefined" : _typeof(wx)) == 'object' ? true : false;
     }
   }, {
     key: "send",
