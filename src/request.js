@@ -1,22 +1,18 @@
 import Logger from './log'
 import _default from './config'
-const success = new Logger(_default)
-window.success = success
+const Log = new Logger(_default)
 class Request {
   constructor(){
 
   }
 
-  ajax(options){
-    this.request(options)
-  }
 
-  request(option){
+  webRequest(option){
     //let {url,method,data} = option
     // object to params?
-    console.log(success)
+      window.option = option
       if (String(option) !== '[object Object]') return undefined
-      option.method = option.method ? option.method.toUpperCase() : 'GET'
+      option.method = option.method ? option.method.toUpperCase() : 'POST'
       option.data = option.data || {}
       var formData = []
       for (var key in option.data) {
@@ -25,10 +21,10 @@ class Request {
       option.data = formData.join('&')
 
       if (option.method === 'GET') {
-        option.getUrl= option.url
+        option.getUrl= option.url + "?" + option.data
       }
-      const {transferResponse} = option
-      if(!option.KeepTransferReponse) delete option.transferRespons
+      let {transferResponse} = option
+
       console.log(option)
       var xhr = new XMLHttpRequest()
       xhr.responseType = option.responseType || 'json'
@@ -38,30 +34,44 @@ class Request {
             if(transferResponse)
             {
               console.log(xhr.response)
-              success.enqueue({
+              Log.enqueue({
                 url:option.url?option.url:option.getUrl,
                 data:option.data,
-                res:transferResponse(xhr.response),
+                res:option.validateHit ? transferResponse(xhr.response): xhr.status,
                 //transferResponse(xhr.response)
               })
+              if(!!option.onSuccess){
+                option.onSuccess(option)
+              }
+
+                //delete option.transferRespons
+                //transferResponse = (res)=> res
+
 
             }else{
-              success.enqueue({
+              Log.enqueue({
                 url:option.url?option.url:option.getUrl,
                 data:option.data,
-                res:xhr.response,
+                res:option.validateHit ? xhr.response : xhr.status,
               })
+              if(!!option.onSuccess){
+                option.onSuccess(option)
+              }
 
             }
           } else {
               //this.fail()
-              success.enqueue({
+              Log.enqueue({
                 error:"Error",
                 url:option.url?option.url:option.getUrl,
-                res:xhr.response
+                res:option.validateHit ? xhr.response : "Error"
                 //data:option.data,
                 //transferResponse(xhr.response)
               })
+              if(!!option.onError){
+              option.onError(option)
+              }
+
 
           }
         }
@@ -92,7 +102,7 @@ send(options){
   if(this.isonWechat()){
     return this.weRequest(options)
   }
-  return this.ajax(options)
+  return this.webRequest(options)
 
 }
 

@@ -1,4 +1,5 @@
 import Store from './common'
+import helper from './helper'
 
 class Logger {
   constructor(config){
@@ -12,14 +13,14 @@ class Logger {
       }
       if(this.size() < this.maxLogLength){
         this.log.add({
-          time : new Date(),
+          time : helper.formatTime(new Date),
           ...val,
         });
       }
       if(this.size() >= this.maxLogLength){
         this.log.shift()
         this.log.add({
-          time:new Date(),
+          time:helper.formatTime(new Date),
           ...val})
       }
       return this.log

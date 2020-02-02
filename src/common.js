@@ -1,12 +1,13 @@
 class Store{
   constructor(){
     this.init()
+    this.GAlog = []
   }
 
 init(){
   if(this.env() == "WEB"){
-    window.GAlog = window.GAlog || []
-    return window.GAlog
+    this.GAlog = this.GAlog || []
+    return this.GAlog
   }
 
   if(this.env() ==WECHAT){
@@ -29,9 +30,10 @@ init(){
 
   add(val){
     if(this.env() == "WEB"){
-      window.GAlog.push(val)
-      window.localStorage.setItem("gaLog",JSON.stringify(window.GAlog));
-      return window.GAlog
+      this.GAlog.push(val)
+      this.GAlog = this.GAlog.reverse()
+      window.localStorage.setItem("gaLog",JSON.stringify(this.GAlog));
+      return this.GAlog
     }
 
     if(this.env() ==WECHAT){
@@ -42,18 +44,19 @@ init(){
 
   remove(){
     if(this.env() == "WEB"){
-      window.GAlog = []
+      this.GAlog = []
       window.localStorage.clear()
-      return window.GAlog
+      return this.GAlog
     }
     //wechat
   }
 
   shift(){
     if(this.env() == "WEB"){
-      window.GAlog.shift()
-      window.localStorage.setItem("gaLog",JSON.stringify(window.GAlog));
-      return window.GAlog
+      this.GAlog.shift()
+      this.GAlog = this.GAlog.reverse()
+      window.localStorage.setItem("gaLog",JSON.stringify(this.GAlog));
+      return this.GAlog
     }
 
     //wechat
@@ -61,10 +64,15 @@ init(){
 
   size(){
     if(this.env() == "WEB"){
-      return window.GAlog.length
+      return this.GAlog.length
     }
     //wechat
   }
+
+  sortByTime(a,b){
+  return new Date(a.time) - new Date(b.time)
+}
+
 
 
 

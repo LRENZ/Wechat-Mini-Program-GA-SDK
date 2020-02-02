@@ -19,19 +19,7 @@ class MP{
     //this.PreSentLogger.enqueue(data)
   }
 
-  onSuccess(res){
-    console.log('res')
-    console.log(this)
-    //this.ResponseLogger.enqueue(res)
-  }
-
-  onError(e){
-    console.log("error")
-  //  this.errorLogger.enqueue(e)
-  }
-
   get(...args){
-    console.log(this)
    let op = this._preprocessArgs("GET",args)
    if(!op){
 
@@ -41,7 +29,7 @@ class MP{
 
   post(...args) {
     let op = this._preprocessArgs('POST', args);
-     console.log(op)
+     //console.log(op)
     if (!op) {
       return op
     }
@@ -56,7 +44,6 @@ class MP{
     ...options
   };
   config.url = this.getEnvURL(config)
-
     return config;
   }
 
@@ -71,13 +58,15 @@ class MP{
   if(typeof arg[0] == "object"){
     options = {
       method,
-      url:this.getEnvURL(this.default),
+      url:this.default.url,
     ...arg[0]}
   }
 
-  let { error, value } = schema.validate(options.data);
-  console.log(error)
-  helper.Error(error)
+  console.log('aeg')
+
+  //let { error, value } = schema.validate(options.data);
+  //console.log(error)
+  //helper.Error(error)
   console.log(options)
   //console.log(arg)
   /*if (arg.length == 1 && typeof arg[0] == 'string') {
@@ -99,7 +88,6 @@ class MP{
 
 
 getEnvURL(config){
-  console.log(config)
   if(config.debug && config.validateHit){
     return config.GAdebugURL
   }
@@ -115,36 +103,40 @@ request(options){
 
   const res = new Request()
   // 合并
-  var cog = {
-    ...this.default,
-    ...options
-  }
-
-  console.log(cog)
+  let cog = options
+  let mh = options.method
+  //delete options.data
+  //let cog = {
+    //...this.default,
+    //...options
+  //}
+  //console.log(this.default)
+  helper.merge(cog,this.default)
+  cog.method = mh
   // 检验参数
-
   //替换 baseURL
-  cog.url = this.getEnvURL(cog)
+  //cog.url = this.getEnvURL(cog)
   //console.log(cog)
 
   // 变换下请求
-  const {transferRequest} = cog
-  if(!cog.KeepTransferRequest) delete cog.transferRequest
+  let {transferRequest} = cog
+
   if(transferRequest) cog = transferRequest(cog)
-  console.log(cog)
+    //delete cog.transferRequest
+    //delete this.default.transferRequest
+    //transferRequest = (cog) => cog;
+
   let list = this.interceptors.request.list();
   list.forEach(fn => {
   cog = fn(cog);
 });
-
-  console.log(cog)
-  window.cog = cog
+  //window.cog = cog
   //window.cog = cog
   //window.res= res
   //cog.success = this.onSuccess
   //cog.fail = this.onError
   // 正式请求
-  return res.send(cog,this.onSuccess,this.onError)
+  return res.send(cog)
 }
 
 

@@ -14,11 +14,7 @@ const _default = {
       'X-Request-By': 'XMLHttpRequest',
     },
   },
-  data:{
-
-  },
   rest:'',
-  log:[]
 };
 
 
