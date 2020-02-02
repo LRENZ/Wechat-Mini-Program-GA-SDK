@@ -16,6 +16,7 @@ class helpers {
   }
 
   merge(dest, src) {
+  if(JSON.stringify(src) === '{}') return dest
   for (let name in src) {
     if (typeof src[name] == 'object') {
       if (!dest[name]) {

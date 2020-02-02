@@ -11,6 +11,7 @@ class Logger {
       if(!this.debug){
         console.log("debug mode paused, won't record any log right now")
       }
+
       if(this.size() < this.maxLogLength){
         this.log.add({
           time : helper.formatTime(new Date),

@@ -3,6 +3,7 @@ import Interceptor from './Interceptor';
 import Request from './request';
 import schema from './validation'
 import helper from './helper'
+import Store from './common'
 
 class MP{
   constructor(options = {} ){
@@ -15,9 +16,10 @@ class MP{
 
   }
 
-  preSent(data){
-    //this.PreSentLogger.enqueue(data)
-  }
+   getLog(){
+     let log = new Store();
+     return log.getLog();
+   }
 
   get(...args){
    let op = this._preprocessArgs("GET",args)
@@ -38,12 +40,14 @@ class MP{
 
 
   create(options = {}){
-
+    if(JSON.stringify(options) === '{}') throw new Error("Error : config could not empty!")
     let config = {
     ...JSON.parse(JSON.stringify(_default)),
     ...options
   };
   config.url = this.getEnvURL(config)
+  helper.merge(config.data,config.defaultGaData)
+  console.log(config)
     return config;
   }
 

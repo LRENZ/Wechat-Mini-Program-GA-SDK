@@ -93,6 +93,52 @@ class Request {
 
 weRequest(options){
    console.log("test on wechat")
+   let {transferResponse} = options
+   wx.request({
+     url:options.url,
+     method:options.method,
+     data:options.data,
+     header:options.headers,
+     timeout:options.wxRequestTimeout,
+     success(res){
+       console.log(res)
+       if(transferResponse){
+       Log.enqueue({
+         url:options.url?options.url:options.getUrl,
+         data:options.data,
+         res:options.transferResponse(res),
+       })
+     }else{
+       Log.enqueue({
+         url:options.url?options.url:options.getUrl,
+         data:options.data,
+         res:res,
+       })
+     }
+       if(!!options.onSuccess){
+         options.onSuccess(options)
+       }
+     },
+     fail(res){
+       console.log(res)
+       if(transferResponse){
+       Log.enqueue({
+         url:options.url?options.url:options.getUrl,
+         data:options.data,
+         res:options.transferResponse(res),
+       })
+     }else{
+       Log.enqueue({
+         url:options.url?options.url:options.getUrl,
+         data:options.data,
+         res:res,
+       })
+     }
+       if(!!options.onError){
+         options.onError(options)
+       }
+     }
+   })
 }
 isonWechat(){
   return typeof wx == 'object'? true : false

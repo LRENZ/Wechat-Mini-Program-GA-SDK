@@ -10,11 +10,11 @@ const _default = {
   GAURL:"https://www.google-analytics.com/collect",
   method: 'POST',
   headers: {
-    common: {
       'X-Request-By': 'XMLHttpRequest',
-    },
+      'Content-Type':'application/x-www-form-urlencoded'
   },
   rest:'',
+  wxRequestTimeout:2000,
 };
 
 

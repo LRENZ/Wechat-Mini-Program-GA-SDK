@@ -1,11 +1,17 @@
 import MP from './mp'
+
+
 let t = {
+
   transferRequest(config){
     config.data.dp = "/test"
     return config
   },
   data:{
-    'cid':"1",
+    cid:1,
+    ua:"test_ua",
+    ul:"zh_cn",
+
   },
 
   transferResponse(res){
@@ -47,6 +53,5 @@ a.get({data:{"cd1":"test"}})
 //a.post({data:{tid:"UA-987654"}})
 //b.post({data:{'test':1}})
 //console.log(a.Interceptor)
-
-window.a = a
+//window.a = a
 export default MP

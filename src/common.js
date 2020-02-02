@@ -1,28 +1,18 @@
 class Store{
   constructor(){
-    this.init()
     this.GAlog = []
   }
 
-init(){
-  if(this.env() == "WEB"){
-    this.GAlog = this.GAlog || []
-    return this.GAlog
-  }
-
-  if(this.env() ==WECHAT){
-
-  }
-}
 
   env(){
-    if (typeof window == "object"){
-      console.log("on Web")
-      return "WEB"
-    }
     if(typeof wx == "object"){
       console.log("on wechat")
       return "WECHAT"
+    }
+
+    if (!!document.URL){
+      console.log("on Web")
+      return "WEB"
     }
   }
 
@@ -33,11 +23,14 @@ init(){
       this.GAlog.push(val)
       this.GAlog = this.GAlog.reverse()
       window.localStorage.setItem("gaLog",JSON.stringify(this.GAlog));
-      return this.GAlog
+      return this.getLog()
     }
 
-    if(this.env() ==WECHAT){
-
+    if(this.env() == "WECHAT"){
+      this.GAlog.push(val)
+      this.GAlog = this.GAlog
+      wx.setStorageSync("gaLog",this.GAlog)
+      return this.getLog()
     }
 
   }
@@ -46,7 +39,13 @@ init(){
     if(this.env() == "WEB"){
       this.GAlog = []
       window.localStorage.clear()
-      return this.GAlog
+      return this.getLog()
+    }
+
+    if(this.env() == 'WECHAT'){
+      this.GAlog = []
+      wx.setStorageSync("gaLog",this.GAlog)
+      return this.getLog()
     }
     //wechat
   }
@@ -56,7 +55,14 @@ init(){
       this.GAlog.shift()
       this.GAlog = this.GAlog.reverse()
       window.localStorage.setItem("gaLog",JSON.stringify(this.GAlog));
-      return this.GAlog
+      return this.getLog()
+    }
+
+    if(this.env() == "WECHAT"){
+      this.GAlog.shift()
+      this.GAlog = this.GAlog
+      wx.setStorageSync("gaLog",this.GAlog)
+      return this.getLog()
     }
 
     //wechat
@@ -66,6 +72,10 @@ init(){
     if(this.env() == "WEB"){
       return this.GAlog.length
     }
+
+    if(this.env() == "WECHAT"){
+      return this.GAlog.length
+    }
     //wechat
   }
 
@@ -73,9 +83,14 @@ init(){
   return new Date(a.time) - new Date(b.time)
 }
 
-
-
-
+   getLog(){
+     if(this.env() == "WECHAT"){
+       return wx.getStorageSync("gaLog")
+     }
+     if(this.env() == "WEB"){
+       return window.localStorage.getItem("gaLog");
+     }
+   }
 
 }
 
