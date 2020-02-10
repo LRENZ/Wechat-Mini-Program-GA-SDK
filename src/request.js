@@ -38,6 +38,7 @@ class Request {
                 url:option.url?option.url:option.getUrl,
                 data:option.data,
                 res:option.validateHit ? transferResponse(xhr.response): xhr.status,
+                hitID:option.hitID,
                 //transferResponse(xhr.response)
               })
               if(!!option.onSuccess){
@@ -53,6 +54,7 @@ class Request {
                 url:option.url?option.url:option.getUrl,
                 data:option.data,
                 res:option.validateHit ? xhr.response : xhr.status,
+                hitID:option.hitID,
               })
               if(!!option.onSuccess){
                 option.onSuccess(option)
@@ -64,7 +66,8 @@ class Request {
               Log.enqueue({
                 error:"Error",
                 url:option.url?option.url:option.getUrl,
-                res:option.validateHit ? xhr.response : "Error"
+                res:option.validateHit ? xhr.response : "Error",
+                hitID:option.hitID,
                 //data:option.data,
                 //transferResponse(xhr.response)
               })
@@ -72,6 +75,7 @@ class Request {
               option.onError(option)
               }
 
+              return "Request Fail"
 
           }
         }
@@ -86,13 +90,11 @@ class Request {
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
         xhr.send(option.data)
       }
-
       //console.loh(t)
     }
 
 
 weRequest(options){
-   console.log("test on wechat")
    let {transferResponse} = options
    wx.request({
      url:options.url,
@@ -107,12 +109,14 @@ weRequest(options){
          url:options.url?options.url:options.getUrl,
          data:options.data,
          res:options.transferResponse(res),
+         hitID:option.hitID,
        })
      }else{
        Log.enqueue({
          url:options.url?options.url:options.getUrl,
          data:options.data,
          res:res,
+         hitID:option.hitID,
        })
      }
        if(!!options.onSuccess){
@@ -126,17 +130,20 @@ weRequest(options){
          url:options.url?options.url:options.getUrl,
          data:options.data,
          res:options.transferResponse(res),
+         hitID:option.hitID,
        })
      }else{
        Log.enqueue({
          url:options.url?options.url:options.getUrl,
          data:options.data,
          res:res,
+         hitID:option.hitID,
        })
      }
        if(!!options.onError){
          options.onError(options)
        }
+
      }
    })
 }

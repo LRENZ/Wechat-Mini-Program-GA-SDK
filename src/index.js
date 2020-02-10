@@ -1,43 +1,41 @@
 import MP from './mp'
 
+let UA=()=> "UA-123456"
 
-let t = {
-
+let config = {
   transferRequest(config){
-    config.data.dp = "/test"
+    console.log('do something before sending the hit')
+    //config.data.dp = "/test"
     return config
   },
-  data:{
+  data:{  //common request payload
+    v:1,
     cid:1,
-    ua:"test_ua",
-    ul:"zh_cn",
-
+    tid:UA(),
+    dp:"placeholder",
   },
-
   transferResponse(res){
-    res.test = "test"
-    console.log(res)
+    console.log("do something for the response")
     return res
   },
-  validateHit:false,
-
+  validateHit:false, // will send to the vvalidation endpoint(optional)
+  //proxyURL:"YOUR_PROXY_URL"
   onSuccess(config){
-    console.log("success")
+    console.log("success") //your custom success function (options)
   },
   onError(config){
     console.log("Error")
   }
 }
 
-
-let a = new MP(t)
-
-a.interceptors.request.use(function(config) {
-  config.rest = 'true';
-  //alert('tt')
+let GA = new MP(config)
+window.GA= GA
+GA.interceptors.request.use(function(config) { // push a handler function before send request
+  console.log('check if the data was valid') // process data before send to GA
   return config;
 });
 
+GA.post({dp:"/ga"})
 
 //let s = {
   //debug:true,
@@ -48,8 +46,6 @@ a.interceptors.request.use(function(config) {
 //window.test = new MP()
 //a.get("/debug/collect",{data:{test:1}})
 //a.post("/debug/collect",{data:{test:2}})
-a.post({data:{tid:"UA-123456",v:"1"}})
-a.get({data:{"cd1":"test"}})
 //a.post({data:{tid:"UA-987654"}})
 //b.post({data:{'test':1}})
 //console.log(a.Interceptor)

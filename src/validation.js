@@ -1,4 +1,13 @@
 //const Joi = require('@hapi/joi');
-const schema = {}
+class validate{
+  constructor(){
 
-export default schema
+  }
+}
+
+//check hit payload lengtg
+//check required paramters
+//check if there is any unvalid paramters
+//check if mobile or web
+
+export default validate

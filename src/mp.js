@@ -12,8 +12,6 @@ class MP{
     request: new Interceptor(),
   response: new Interceptor(),
 };
-
-
   }
 
    getLog(){
@@ -30,8 +28,8 @@ class MP{
   }
 
   post(...args) {
+    console.log(args)
     let op = this._preprocessArgs('POST', args);
-     //console.log(op)
     if (!op) {
       return op
     }
@@ -47,46 +45,25 @@ class MP{
   };
   config.url = this.getEnvURL(config)
   helper.merge(config.data,config.defaultGaData)
-  console.log(config)
     return config;
   }
 
-
-
-
   _preprocessArgs(method, ...args) {
+
   let options;
-  //
   let arg = args.flat()
-  //window.arg = arg
+  if(arg.length == 0){
+    options ={
+      method,
+      url:this.default.url,
+    }
+  }
   if(typeof arg[0] == "object"){
     options = {
       method,
       url:this.default.url,
-    ...arg[0]}
+    data:arg[0]}
   }
-
-  console.log('aeg')
-
-  //let { error, value } = schema.validate(options.data);
-  //console.log(error)
-  //helper.Error(error)
-  console.log(options)
-  //console.log(arg)
-  /*if (arg.length == 1 && typeof arg[0] == 'string') {
-    options = { method, url: arg[0] };
-  } else if (arg.length != 1 && arg[1].constructor == Object) {
-    options = {
-      ...arg[1],
-      method,
-      url:arg[0],
-    };
-  } else if(arg[0].constructor == Object) {
-    options = {method, url:this.getEnvURL()}
-    return options;
-  }else{
-    return undefined;
-  }*/
   return options;
 }
 
@@ -104,19 +81,18 @@ getEnvURL(config){
 }
 
 request(options){
-
+  const optionCopy = helper.deepClone(options)
   const res = new Request()
+  options.hitID = helper.generateUUID()
   // 合并
   let cog = options
-  let mh = options.method
-  //delete options.data
-  //let cog = {
-    //...this.default,
-    //...options
-  //}
-  //console.log(this.default)
-  helper.merge(cog,this.default)
+  const mh = optionCopy.method
+  const opData = optionCopy.data
+
+  cog= helper.merge(cog,this.default)
+  //helper.merge(cog,options)
   cog.method = mh
+  cog.data = helper.merge(cog.data,opData)
   // 检验参数
   //替换 baseURL
   //cog.url = this.getEnvURL(cog)

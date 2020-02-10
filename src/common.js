@@ -3,7 +3,6 @@ class Store{
     this.GAlog = []
   }
 
-
   env(){
     if(typeof wx == "object"){
       console.log("on wechat")
@@ -16,8 +15,6 @@ class Store{
     }
   }
 
-
-
   add(val){
     if(this.env() == "WEB"){
       this.GAlog.push(val)
@@ -29,7 +26,7 @@ class Store{
     if(this.env() == "WECHAT"){
       this.GAlog.push(val)
       this.GAlog = this.GAlog
-      wx.setStorageSync("gaLog",this.GAlog)
+      wx.setStorage({key:"gaLog",data:this.GAlog})
       return this.getLog()
     }
 
@@ -44,7 +41,7 @@ class Store{
 
     if(this.env() == 'WECHAT'){
       this.GAlog = []
-      wx.setStorageSync("gaLog",this.GAlog)
+      wx.removeStorage({key: 'gaLog'})
       return this.getLog()
     }
     //wechat
@@ -61,7 +58,7 @@ class Store{
     if(this.env() == "WECHAT"){
       this.GAlog.shift()
       this.GAlog = this.GAlog
-      wx.setStorageSync("gaLog",this.GAlog)
+      wx.setStorage({key:"gaLog",data:this.GAlog})
       return this.getLog()
     }
 
@@ -85,7 +82,7 @@ class Store{
 
    getLog(){
      if(this.env() == "WECHAT"){
-       return wx.getStorageSync("gaLog")
+       return wx.getStorage("gaLog")
      }
      if(this.env() == "WEB"){
        return window.localStorage.getItem("gaLog");

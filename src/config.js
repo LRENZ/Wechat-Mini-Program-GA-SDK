@@ -3,8 +3,6 @@ const _default = {
   debug:true,
   proxyURL:'',
   GAdebugURL:"https://www.google-analytics.com/debug/collect",
-  KeepTransferRequest:false,
-  KeepTransferReponse:false,
   validateHit:false,
   maxLogLength:20,
   GAURL:"https://www.google-analytics.com/collect",
@@ -15,6 +13,8 @@ const _default = {
   },
   rest:'',
   wxRequestTimeout:2000,
+  enableLogger:true,
+  productScopeCD:{},
 };
 
 

@@ -5,11 +5,12 @@ class Logger {
   constructor(config){
     this.log = new Store()
     this.maxLogLength = config.maxLogLength
-    this.debug = config.debug
+    this.enableLogger = config.enableLogger
   }
     enqueue(val) {
-      if(!this.debug){
+      if(!this.enableLogger){
         console.log("debug mode paused, won't record any log right now")
+        return false
       }
 
       if(this.size() < this.maxLogLength){
