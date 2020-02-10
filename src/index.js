@@ -1,6 +1,6 @@
 import MP from './mp'
 
-let UA=()=> "UA-123456"
+let UA=()=> "UA-71412438-1"
 
 let config = {
   transferRequest(config){
@@ -10,9 +10,10 @@ let config = {
   },
   data:{  //common request payload
     v:1,
-    cid:1,
+    cid:1234556,
     tid:UA(),
     dp:"placeholder",
+    ds:"wechat",
   },
   transferResponse(res){
     console.log("do something for the response")
@@ -35,7 +36,46 @@ GA.interceptors.request.use(function(config) { // push a handler function before
   return config;
 });
 
-GA.post({dp:"/ga"})
+GA.post({
+  dp:"/wechat",
+  t:'event',
+  ec:"test",
+  ea:"wechatSDK",
+  pa:"detail",
+  "products": [
+    {
+      "id": "bc823",
+      "name": "Fuelworks T-Shirt",
+      "price": "92.00",
+      "brand": "Fuelworks",
+      "category": "T-Shirts",
+      "position": "4"
+    },
+
+    {
+      "id": "bc843",
+      "name": " T-Shirt",
+      "price": "92.00",
+      "brand": "Fuelworks",
+      "category": "T-Shirts",
+      "position": "4"
+    },
+  ],
+    "promotions": [{
+  "id": "bts",
+  "name": "Back To School",
+  "creative": "HOME banner",
+  "position": "right sidebar"
+}],
+productScopeCD:{
+  '3':'cd3',
+  '6' : "cd6"
+},
+
+productScopeCM:{
+  '4':100,
+}
+})
 
 //let s = {
   //debug:true,

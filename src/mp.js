@@ -4,6 +4,7 @@ import Request from './request';
 import schema from './validation'
 import helper from './helper'
 import Store from './common'
+import eec from './EecUtils.js'
 
 class MP{
   constructor(options = {} ){
@@ -50,8 +51,22 @@ class MP{
 
   _preprocessArgs(method, ...args) {
 
+
+
   let options;
   let arg = args.flat()
+  /*if(arg[0].hasOwnProperty("productScopeCD")){
+    var cogCd = arg[0].productScopeCD || {}
+    delete arg[0].productScopeCD
+  }
+
+    if(arg[0].hasOwnProperty("productScopeCM")){
+      var cogCm =arg[0].productScopeCM || {}
+      delete arg[0].productScopeCM
+    }
+  let eecobj = eec.checkEEC(arg[0],cogCd,cogCm)
+  helper.merge(arg[0],eecobj)
+  */
   if(arg.length == 0){
     options ={
       method,
@@ -81,6 +96,7 @@ getEnvURL(config){
 }
 
 request(options){
+
   const optionCopy = helper.deepClone(options)
   const res = new Request()
   options.hitID = helper.generateUUID()
@@ -99,16 +115,42 @@ request(options){
   //console.log(cog)
 
   // 变换下请求
-  let {transferRequest} = cog
 
-  if(transferRequest) cog = transferRequest(cog)
+  var cc = helper.deepClone(cog)
+  if(cc.data.hasOwnProperty("productScopeCD")){
+    var cogCd = cc.data.productScopeCD || {}
+    delete cc.data.productScopeCD
+  }
+
+    if(cog.data.hasOwnProperty("productScopeCM")){
+      var cogCm = cc.data.productScopeCM || {}
+      delete cc.data.productScopeCM
+    }
+  let eecobj = eec.checkEEC(cc.data,cogCd,cogCm)
+
+  cc.data = Object.assign(cc.data,eecobj)
+  if(cc.data.hasOwnProperty("products")){
+    delete cc.data.products
+  }
+
+  if(cc.data.hasOwnProperty("promotions")){
+    delete cc.data.promotions
+  }
+
+  if(cc.data.hasOwnProperty("impresstion")){
+    delete cc.data.impresstion
+  }
+
+  let {transferRequest} = cc
+
+  if(transferRequest) cc = transferRequest(cc)
     //delete cog.transferRequest
     //delete this.default.transferRequest
     //transferRequest = (cog) => cog;
 
   let list = this.interceptors.request.list();
   list.forEach(fn => {
-  cog = fn(cog);
+  cc = fn(cc);
 });
   //window.cog = cog
   //window.cog = cog
@@ -116,7 +158,7 @@ request(options){
   //cog.success = this.onSuccess
   //cog.fail = this.onError
   // 正式请求
-  return res.send(cog)
+  return res.send(cc)
 }
 
 

@@ -15,6 +15,7 @@ const _default = {
   wxRequestTimeout:2000,
   enableLogger:true,
   productScopeCD:{},
+  productScopeCM:{},
 };
 
 
