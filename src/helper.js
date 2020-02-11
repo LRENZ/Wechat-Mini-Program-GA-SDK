@@ -5,9 +5,8 @@ class helpers {
 
 
   objectToParams(obj){
-    Object.keys(obj).map(function(key) {
-  return key + '=' + obj[key];
-}).join('&');
+let queryString = Object.keys(obj).map(key => key + '=' + obj[key]).join('&');
+return queryString
   }
 
   Error(msg){

@@ -1,5 +1,6 @@
 const path = require('path');
 
+
 module.exports = function() {
   const dev = true;
 
@@ -10,7 +11,7 @@ module.exports = function() {
       path: path.resolve(__dirname, 'dist'),
       filename: dev ? 'mp.js' : 'mp.min.js',
       sourceMapFilename: dev ? 'mp.map' : 'mp.min.map',
-      libraryTarget: 'umd',
+      libraryTarget: "commonjs2",
     },
     devtool: 'source-map',
     module: {

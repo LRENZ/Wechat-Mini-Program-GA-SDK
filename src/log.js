@@ -6,14 +6,29 @@ class Logger {
     this.log = new Store()
     this.maxLogLength = config.maxLogLength
     this.enableLogger = config.enableLogger
+    this.init()
   }
+
+  init(){
+
+    if(this.size() == 0){
+
+
+    this.log.add(
+      {
+         time:helper.formatTime(new Date),
+         Launch:"Logger Init"
+      }
+    )
+  }
+  }
+
     enqueue(val) {
       if(!this.enableLogger){
         console.log("debug mode paused, won't record any log right now")
         return false
       }
-      console.log(this.size())
-      console.log(this.maxLogLength)
+
       if(this.size() < this.maxLogLength){
         this.log.add({
           time : helper.formatTime(new Date),
@@ -26,6 +41,7 @@ class Logger {
           time:helper.formatTime(new Date),
           ...val})
       }
+      console.log(this.log)
       return this.log
     }
 

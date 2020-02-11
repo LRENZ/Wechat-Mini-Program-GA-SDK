@@ -1,16 +1,16 @@
 class Store{
   constructor(){
     this.GAlog = this.GAlog || this.getLog() || []
-  }
 
+  }
   env(){
     if(typeof wx == "object"){
-      console.log("on wechat")
+
       return "WECHAT"
     }
 
     if (!!document.URL){
-      console.log("on Web")
+
       return "WEB"
     }
   }
@@ -66,8 +66,9 @@ class Store{
   }
 
   size(){
-     let galog = this.getLog()
-     return galog.length
+     let galog = this.getLog() || 0
+     console.log(galog)
+     return galog.length || 0
     //wechat
   }
 
@@ -77,8 +78,12 @@ class Store{
 
    getLog(){
      if(this.env() == "WECHAT"){
-       return wx.getStorage("gaLog")
+       var t =wx.getStorageSync("gaLog")
      }
+     console.log(t)
+
+     return t
+
      if(this.env() == "WEB"){
        try{
          return JSON.parse(window.localStorage.getItem("gaLog"))

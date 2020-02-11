@@ -1,5 +1,6 @@
 import MP from './mp'
 
+/*
 let UA=()=> "UA-71412438-1"
 
 let config = {
@@ -30,10 +31,11 @@ let config = {
     console.log("Error")
   },
   //maxLogLength:10,
+  enableLogger:false,
 }
 
 let GA = new MP(config)
-window.GA= GA
+//window.GA= GA
 GA.interceptors.request.use(function(config) { // push a handler function before send request
   console.log('check if the data was valid') // process data before send to GA
   return config;
@@ -80,6 +82,8 @@ productScopeCM:{
 }
 
 })
+
+*/
 
 //let s = {
   //debug:true,

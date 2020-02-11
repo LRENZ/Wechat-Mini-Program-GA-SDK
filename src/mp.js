@@ -6,6 +6,7 @@ import helper from './helper'
 import Store from './common'
 import eec from './EecUtils.js'
 import wechatUtils from './wechatUtils'
+import validation from './validation.js'
 class MP{
   constructor(options = {} ){
     this.default = this.create(options)
@@ -14,10 +15,12 @@ class MP{
   response: new Interceptor(),
 };
     this.wechatUtils = wechatUtils
+    this.validation = new validation()
   }
 
    getLog(){
      let log = new Store();
+
      return log.getLog();
    }
 
@@ -142,6 +145,9 @@ request(options){
     delete cc.data.impresstion
   }
    const res = new Request(cc)
+   if(cc.validateParams){
+     this.validation.use(cc.data)
+   }
   let {transferRequest} = cc
 
   if(transferRequest) cc = transferRequest(cc)
@@ -153,6 +159,8 @@ request(options){
   list.forEach(fn => {
   cc = fn(cc);
 });
+
+
   //window.cog = cog
   //window.cog = cog
   //window.res= res

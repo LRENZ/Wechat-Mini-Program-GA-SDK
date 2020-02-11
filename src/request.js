@@ -111,14 +111,14 @@ weRequest(options){
          url:options.url?options.url:options.getUrl,
          data:options.data,
          res:options.transferResponse(res),
-         hitID:option.hitID,
+         hitID:options.hitID,
        })
      }else{
       that.Log.enqueue({
          url:options.url?options.url:options.getUrl,
          data:options.data,
          res:res,
-         hitID:option.hitID,
+         hitID:options.hitID,
        })
      }
        if(!!options.onSuccess){
@@ -132,14 +132,14 @@ weRequest(options){
          url:options.url?options.url:options.getUrl,
          data:options.data,
          res:options.transferResponse(res),
-         hitID:option.hitID,
+         hitID:options.hitID,
        })
      }else{
        that.Log.enqueue({
          url:options.url?options.url:options.getUrl,
          data:options.data,
          res:res,
-         hitID:option.hitID,
+         hitID:options.hitID,
        })
      }
        if(!!options.onError){
