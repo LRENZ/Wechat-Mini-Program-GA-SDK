@@ -1,3 +1,4 @@
+
 const SceneMapping = {
     1001: "发现栏小程序主入口",
     1005: "顶部搜索框的搜索结果页",
@@ -70,9 +71,10 @@ const SceneMapping = {
   };
 
 
-class Utils{
-  construct(){
+class wechatUtils{
+  construct(sMapping){
     this.onWechat = this.isOnwechat()
+    this.SMapping = sMapping || SceneMapping
   }
   isOnwechat(){
     if(typeof wx == 'object'){
@@ -83,7 +85,7 @@ class Utils{
 
   mappingSceneToCN(num){
     if(this.onWechat){
-      return SceneMapping[num] || SceneMapping[default]
+      return this.SMapping[num] || this.SMapping['default']
     }
     return ''
   }
@@ -112,3 +114,5 @@ class Utils{
 
 
 }
+
+export default wechatUtils

@@ -1,15 +1,16 @@
 import Logger from './log'
 import _default from './config'
-const Log = new Logger(_default)
-class Request {
-  constructor(){
 
+class Request {
+  constructor(option){
+     this.Log = new Logger(option)
   }
 
 
   webRequest(option){
     //let {url,method,data} = option
     // object to params?
+      let that = this
       window.option = option
       if (String(option) !== '[object Object]') return undefined
       option.method = option.method ? option.method.toUpperCase() : 'POST'
@@ -34,7 +35,7 @@ class Request {
             if(transferResponse)
             {
               console.log(xhr.response)
-              Log.enqueue({
+              that.Log.enqueue({
                 url:option.url?option.url:option.getUrl,
                 data:option.data,
                 res:option.validateHit ? transferResponse(xhr.response): xhr.status,
@@ -50,7 +51,7 @@ class Request {
 
 
             }else{
-              Log.enqueue({
+              that.Log.enqueue({
                 url:option.url?option.url:option.getUrl,
                 data:option.data,
                 res:option.validateHit ? xhr.response : xhr.status,
@@ -63,7 +64,7 @@ class Request {
             }
           } else {
               //this.fail()
-              Log.enqueue({
+              that.Log.enqueue({
                 error:"Error",
                 url:option.url?option.url:option.getUrl,
                 res:option.validateHit ? xhr.response : "Error",
@@ -95,6 +96,7 @@ class Request {
 
 
 weRequest(options){
+  let that = this
    let {transferResponse} = options
    wx.request({
      url:options.url,
@@ -105,14 +107,14 @@ weRequest(options){
      success(res){
        console.log(res)
        if(transferResponse){
-       Log.enqueue({
+       that.Log.enqueue({
          url:options.url?options.url:options.getUrl,
          data:options.data,
          res:options.transferResponse(res),
          hitID:option.hitID,
        })
      }else{
-       Log.enqueue({
+      that.Log.enqueue({
          url:options.url?options.url:options.getUrl,
          data:options.data,
          res:res,
@@ -126,14 +128,14 @@ weRequest(options){
      fail(res){
        console.log(res)
        if(transferResponse){
-       Log.enqueue({
+       that.Log.enqueue({
          url:options.url?options.url:options.getUrl,
          data:options.data,
          res:options.transferResponse(res),
          hitID:option.hitID,
        })
      }else{
-       Log.enqueue({
+       that.Log.enqueue({
          url:options.url?options.url:options.getUrl,
          data:options.data,
          res:res,
@@ -152,6 +154,7 @@ isonWechat(){
 }
 
 send(options){
+
   if(this.isonWechat()){
     return this.weRequest(options)
   }

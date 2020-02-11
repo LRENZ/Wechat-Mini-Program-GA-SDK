@@ -1,6 +1,6 @@
 class Store{
   constructor(){
-    this.GAlog = []
+    this.GAlog = this.GAlog || this.getLog() || []
   }
 
   env(){
@@ -66,13 +66,8 @@ class Store{
   }
 
   size(){
-    if(this.env() == "WEB"){
-      return this.GAlog.length
-    }
-
-    if(this.env() == "WECHAT"){
-      return this.GAlog.length
-    }
+     let galog = this.getLog()
+     return galog.length
     //wechat
   }
 
@@ -85,7 +80,11 @@ class Store{
        return wx.getStorage("gaLog")
      }
      if(this.env() == "WEB"){
-       return window.localStorage.getItem("gaLog");
+       try{
+         return JSON.parse(window.localStorage.getItem("gaLog"))
+       }catch(e){
+         return window.localStorage.getItem("gaLog")
+       };
      }
    }
 

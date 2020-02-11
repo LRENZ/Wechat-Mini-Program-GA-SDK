@@ -14,8 +14,7 @@ const _default = {
   rest:'',
   wxRequestTimeout:2000,
   enableLogger:true,
-  productScopeCD:{},
-  productScopeCM:{},
+  validateParams:true,
 };
 
 

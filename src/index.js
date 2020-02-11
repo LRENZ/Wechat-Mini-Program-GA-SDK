@@ -14,6 +14,8 @@ let config = {
     tid:UA(),
     dp:"placeholder",
     ds:"wechat",
+    cd1:"custom dimension1",
+    pal:'search result'
   },
   transferResponse(res){
     console.log("do something for the response")
@@ -26,7 +28,8 @@ let config = {
   },
   onError(config){
     console.log("Error")
-  }
+  },
+  //maxLogLength:10,
 }
 
 let GA = new MP(config)
@@ -36,7 +39,7 @@ GA.interceptors.request.use(function(config) { // push a handler function before
   return config;
 });
 
-GA.post({
+GA.get({
   dp:"/wechat",
   t:'event',
   ec:"test",
@@ -75,6 +78,7 @@ productScopeCD:{
 productScopeCM:{
   '4':100,
 }
+
 })
 
 //let s = {

@@ -5,7 +5,7 @@ import schema from './validation'
 import helper from './helper'
 import Store from './common'
 import eec from './EecUtils.js'
-
+import wechatUtils from './wechatUtils'
 class MP{
   constructor(options = {} ){
     this.default = this.create(options)
@@ -13,6 +13,7 @@ class MP{
     request: new Interceptor(),
   response: new Interceptor(),
 };
+    this.wechatUtils = wechatUtils
   }
 
    getLog(){
@@ -98,7 +99,7 @@ getEnvURL(config){
 request(options){
 
   const optionCopy = helper.deepClone(options)
-  const res = new Request()
+
   options.hitID = helper.generateUUID()
   // 合并
   let cog = options
@@ -140,7 +141,7 @@ request(options){
   if(cc.data.hasOwnProperty("impresstion")){
     delete cc.data.impresstion
   }
-
+   const res = new Request(cc)
   let {transferRequest} = cc
 
   if(transferRequest) cc = transferRequest(cc)
