@@ -36,6 +36,7 @@ class Request {
             {
               console.log(xhr.response)
               that.Log.enqueue({
+				type:"success",
                 url:option.url?option.url:option.getUrl,
                 data:option.data,
                 res:option.validateHit ? transferResponse(xhr.response): xhr.status,
@@ -52,6 +53,7 @@ class Request {
 
             }else{
               that.Log.enqueue({
+				type:"success",
                 url:option.url?option.url:option.getUrl,
                 data:option.data,
                 res:option.validateHit ? xhr.response : xhr.status,
@@ -65,7 +67,7 @@ class Request {
           } else {
               //this.fail()
               that.Log.enqueue({
-                error:"Error",
+                type:"error",
                 url:option.url?option.url:option.getUrl,
                 res:option.validateHit ? xhr.response : "Error",
                 hitID:option.hitID,
@@ -108,6 +110,7 @@ weRequest(options){
        console.log(res)
        if(transferResponse){
        that.Log.enqueue({
+		  type:"success",
          url:options.url?options.url:options.getUrl,
          data:options.data,
          res:options.transferResponse(res),
@@ -115,6 +118,7 @@ weRequest(options){
        })
      }else{
       that.Log.enqueue({
+		  type:"success",
          url:options.url?options.url:options.getUrl,
          data:options.data,
          res:res,
@@ -129,6 +133,7 @@ weRequest(options){
        console.log(res)
        if(transferResponse){
        that.Log.enqueue({
+		   type:"error",
          url:options.url?options.url:options.getUrl,
          data:options.data,
          res:options.transferResponse(res),
