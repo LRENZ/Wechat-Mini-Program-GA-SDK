@@ -1440,91 +1440,94 @@ var helper = new helpers();
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ga__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ga */ "./src/ga.js");
 
+/*
+let UA=()=> "UA-71412438-1"
 
-var UA = function UA() {
-  return "UA-71412438-1";
-};
-
-var config = {
-  transferRequest: function transferRequest(config) {
-    console.log('do something before sending the hit'); //config.data.dp = "/test"
-
-    return config;
+let config = {
+  transferRequest(config){
+    console.log('do something before sending the hit')
+    //config.data.dp = "/test"
+    return config
   },
-  data: {
-    //common request payload
-    v: 1,
-    cid: 1234556,
-    tid: UA(),
-    dp: "placeholder",
-    ds: "wechat",
-    cd1: "custom dimension1",
-    pal: 'search result'
+  data:{  //common request payload
+    v:1,
+    cid:1234556,
+    tid:UA(),
+    dp:"placeholder",
+    ds:"wechat",
+    cd1:"custom dimension1",
+    pal:'search result'
   },
-  LoggerName: "we",
-  transferResponse: function transferResponse(res) {
-    console.log("do something for the response");
-    return res;
+  LoggerName:"we",
+  transferResponse(res){
+    console.log("do something for the response")
+    return res
   },
-  validateHit: false,
-  // will send to the vvalidation endpoint(optional)
+  validateHit:false, // will send to the vvalidation endpoint(optional)
   //proxyURL:"YOUR_PROXY_URL"
-  onSuccess: function onSuccess(config) {
-    console.log("success"); //your custom success function (options)
+  onSuccess(config){
+    console.log("success") //your custom success function (options)
   },
-  onError: function onError(config) {
-    console.log("Error");
+  onError(config){
+    console.log("Error")
   },
   //maxLogLength:10,
-  enableLogger: true
-};
+  enableLogger:true,
+}
 var t = [{
-  inputRegex: "/wechat",
-  outputName: "/map"
-}];
-var G = new _ga__WEBPACK_IMPORTED_MODULE_0__["default"](config); //window.GA= GA
-
-G.interceptors.request.use(function (config) {
-  // push a handler function before send request
-  config.data.dp = G.weUtils.map(t, config.data.dp); // process data before send to GA
-
+     inputRegex:"/wechat",
+     outputName:"/map"
+}]
+let G = new GA(config)
+//window.GA= GA
+G.interceptors.request.use(function(config) { // push a handler function before send request
+  config.data.dp  = G.weUtils.map(t, config.data.dp) // process data before send to GA
   return config;
 });
+
 G.post({
-  dp: "/wechat",
-  t: 'event',
-  ec: "test",
-  ea: "wechatSDK",
-  pa: "detail",
-  "products": [{
-    "id": "bc823",
-    "name": "Fuelworks T-Shirt",
-    "price": "92.00",
-    "brand": "Fuelworks",
-    "category": "T-Shirts",
-    "position": "4"
-  }, {
-    "id": "bc843",
-    "name": " T-Shirt",
-    "price": "92.00",
-    "brand": "Fuelworks",
-    "category": "T-Shirts",
-    "position": "4"
-  }],
-  "promotions": [{
-    "id": "bts",
-    "name": "Back To School",
-    "creative": "HOME banner",
-    "position": "right sidebar"
-  }],
-  productScopeCD: {
-    '3': 'cd3',
-    '6': "cd6"
-  },
-  productScopeCM: {
-    '4': 100
-  }
-});
+  dp:"/wechat",
+  t:'event',
+  ec:"test",
+  ea:"wechatSDK",
+  pa:"detail",
+  "products": [
+    {
+      "id": "bc823",
+      "name": "Fuelworks T-Shirt",
+      "price": "92.00",
+      "brand": "Fuelworks",
+      "category": "T-Shirts",
+      "position": "4"
+    },
+
+    {
+      "id": "bc843",
+      "name": " T-Shirt",
+      "price": "92.00",
+      "brand": "Fuelworks",
+      "category": "T-Shirts",
+      "position": "4"
+    },
+  ],
+    "promotions": [{
+  "id": "bts",
+  "name": "Back To School",
+  "creative": "HOME banner",
+  "position": "right sidebar"
+}],
+productScopeCD:{
+  '3':'cd3',
+  '6' : "cd6"
+},
+
+productScopeCM:{
+  '4':100,
+}
+
+})
+*/
+
 /* harmony default export */ __webpack_exports__["default"] = (_ga__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
@@ -2242,24 +2245,24 @@ function () {
   }, {
     key: "generateUA",
     value: function generateUA() {
-      if (this.onWechat) {
-        var res = wx.getSystemInfo();
+      if ((typeof wx === "undefined" ? "undefined" : _typeof(wx)) == 'object') {
+        var res = wx.getSystemInfoSync();
         var isAndroid = res.system.toLowerCase().indexOf('android') > -1;
         var iresPad = !isAndroid && res.model.toLowerCase().indexOf('iphone') == -1;
 
         if (isAndroid) {
-          return "Mozilla/5.0 (Linux; U; " + res.system + "; " + res.model + " Build/000000) AppleWebKit/537.36 (KHTML, like Gecko)Verreson/4.0 Chrome/49.0.0.0 Mobile Safari/537.36 MicroMessenger/" + res.verreson;
+          return "Mozilla/5.0 (Linux; U; " + res.system + "; " + res.model + " Build/000000) AppleWebKit/537.36 (KHTML, like Gecko)Verreson/4.0 Chrome/49.0.0.0 Mobile Safari/537.36 MicroMessenger/" + res.version;
         } else if (!iresPad) {
           var v = res.system.replace(/^.*?([0-9.]+).*?$/, function (x, y) {
             return y;
           }).replace(/\./g, '_');
-          return "Mozilla/5.0 (iPhone; CPU iPhone OS " + v + " like Mac OS X) AppleWebKit/602.3.12 (KHTML, like Gecko) Mobile/14C92 MicroMessenger/" + res.verreson;
+          return "Mozilla/5.0 (iPhone; CPU iPhone OS " + v + " like Mac OS X) AppleWebKit/602.3.12 (KHTML, like Gecko) Mobile/14C92 MicroMessenger/" + res.version;
         } else {
           var _v = res.system.replace(/^.*?([0-9.]+).*?$/, function (x, y) {
             return y;
           }).replace(/\./g, '_');
 
-          return "Mozilla/5.0 (iPad; CPU OS " + _v + " like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Mobile/10A406 MicroMessenger/" + res.verreson;
+          return "Mozilla/5.0 (iPad; CPU OS " + _v + " like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Mobile/10A406 MicroMessenger/" + res.version;
         }
       }
 
@@ -2268,6 +2271,32 @@ function () {
       }
 
       return '';
+    }
+  }, {
+    key: "getCurrentPageUrlWithArgs",
+    value: function getCurrentPageUrlWithArgs() {
+      var pages = getCurrentPages();
+      var currentPage = pages[pages.length - 1];
+      var url = currentPage.route;
+      var options = currentPage.options; //拼接url的参数
+
+      var urlWithArgs = url + '?';
+
+      for (var key in options) {
+        var value = options[key];
+        urlWithArgs += key + '=' + value + '&';
+      }
+
+      urlWithArgs = urlWithArgs.substring(0, urlWithArgs.length - 1);
+      return urlWithArgs;
+    }
+  }, {
+    key: "getCurrentPageUrl",
+    value: function getCurrentPageUrl() {
+      var pages = getCurrentPages();
+      var currentPage = pages[pages.length - 1];
+      var url = currentPage.route;
+      return url;
     }
   }]);
 

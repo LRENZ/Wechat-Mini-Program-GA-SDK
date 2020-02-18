@@ -1,6 +1,6 @@
 import GA from './ga'
 
-
+/*
 let UA=()=> "UA-71412438-1"
 
 let config = {
@@ -86,6 +86,7 @@ productScopeCM:{
 }
 
 })
+*/
 
 
 export default GA

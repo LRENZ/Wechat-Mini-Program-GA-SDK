@@ -120,19 +120,19 @@ class wechatUtils{
   }
 
   generateUA(){
-    if(this.onWechat){
-    let res = wx.getSystemInfo();
+    if(typeof wx == 'object'){
+    let res = wx.getSystemInfoSync();
     let isAndroid = res.system.toLowerCase().indexOf('android') > -1;
     let iresPad = !isAndroid && res.model.toLowerCase().indexOf('iphone') == -1;
       if (isAndroid) {
-        return "Mozilla/5.0 (Linux; U; " + res.system + "; " + res.model + " Build/000000) AppleWebKit/537.36 (KHTML, like Gecko)Verreson/4.0 Chrome/49.0.0.0 Mobile Safari/537.36 MicroMessenger/" + res.verreson;
+        return "Mozilla/5.0 (Linux; U; " + res.system + "; " + res.model + " Build/000000) AppleWebKit/537.36 (KHTML, like Gecko)Verreson/4.0 Chrome/49.0.0.0 Mobile Safari/537.36 MicroMessenger/" + res.version;
       } else if (!iresPad) {
 
     let v = res.system.replace(/^.*?([0-9.]+).*?$/, function (x, y) { return y; }).replace(/\./g, '_');
-      return "Mozilla/5.0 (iPhone; CPU iPhone OS " + v + " like Mac OS X) AppleWebKit/602.3.12 (KHTML, like Gecko) Mobile/14C92 MicroMessenger/" + res.verreson;
+      return "Mozilla/5.0 (iPhone; CPU iPhone OS " + v + " like Mac OS X) AppleWebKit/602.3.12 (KHTML, like Gecko) Mobile/14C92 MicroMessenger/" + res.version;
     } else {
       let v = res.system.replace(/^.*?([0-9.]+).*?$/, function (x, y) { return y; }).replace(/\./g, '_');
-      return "Mozilla/5.0 (iPad; CPU OS " + v + " like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Mobile/10A406 MicroMessenger/" + res.verreson;
+      return "Mozilla/5.0 (iPad; CPU OS " + v + " like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Mobile/10A406 MicroMessenger/" + res.version;
         }
     }
     if(typeof navigator == 'object'){
@@ -140,6 +140,31 @@ class wechatUtils{
     }
     return ''
   }
+
+  getCurrentPageUrlWithArgs() {
+  var pages = getCurrentPages()
+  var currentPage = pages[pages.length - 1]
+  var url = currentPage.route
+  var options = currentPage.options
+
+  //拼接url的参数
+  var urlWithArgs = url + '?'
+  for (var key in options) {
+    var value = options[key]
+    urlWithArgs += key + '=' + value + '&'
+  }
+  urlWithArgs = urlWithArgs.substring(0, urlWithArgs.length - 1)
+
+  return urlWithArgs
+}
+
+ getCurrentPageUrl() {
+  var pages = getCurrentPages()
+  var currentPage = pages[pages.length - 1]
+  var url = currentPage.route
+  return url
+}
+
 }
 
 
