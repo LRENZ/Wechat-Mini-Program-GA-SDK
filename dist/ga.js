@@ -1677,7 +1677,6 @@ function () {
       //let {url,method,data} = option
       // object to params?
       var that = this;
-      window.option = option;
       if (String(option) !== '[object Object]') return undefined;
       option.method = option.method ? option.method.toUpperCase() : 'POST';
       option.data = option.data || {};
@@ -1706,7 +1705,7 @@ function () {
               that.Log.enqueue({
                 type: "success",
                 url: option.url ? option.url : option.getUrl,
-                data: option.data,
+                data: this.removeEmptyObjKey(options.data),
                 res: option.validateHit ? transferResponse(xhr.response) : xhr.status,
                 hitID: option.hitID //transferResponse(xhr.response)
 
@@ -1721,7 +1720,7 @@ function () {
               that.Log.enqueue({
                 type: "success",
                 url: option.url ? option.url : option.getUrl,
-                data: option.data,
+                data: this.removeEmptyObjKey(options.data),
                 res: option.validateHit ? xhr.response : xhr.status,
                 hitID: option.hitID
               });
@@ -1734,6 +1733,7 @@ function () {
             //this.fail()
             that.Log.enqueue({
               type: "error",
+              data: this.removeEmptyObjKey(options.data),
               url: option.url ? option.url : option.getUrl,
               res: option.validateHit ? xhr.response : "Error",
               hitID: option.hitID //data:option.data,
@@ -1770,7 +1770,7 @@ function () {
       wx.request({
         url: options.url,
         method: options.method,
-        data: options.data,
+        data: this.removeEmptyObjKey(options.data),
         header: options.headers,
         timeout: options.wxRequestTimeout,
         success: function success(res) {
@@ -1779,7 +1779,7 @@ function () {
             that.Log.enqueue({
               type: "success",
               url: options.url ? options.url : options.getUrl,
-              data: options.data,
+              data: this.removeEmptyObjKey(options.data),
               res: options.transferResponse(res),
               hitID: options.hitID
             });
@@ -1787,7 +1787,7 @@ function () {
             that.Log.enqueue({
               type: "success",
               url: options.url ? options.url : options.getUrl,
-              data: options.data,
+              data: this.removeEmptyObjKey(options.data),
               res: res,
               hitID: options.hitID
             });
@@ -1803,14 +1803,14 @@ function () {
             that.Log.enqueue({
               type: "error",
               url: options.url ? options.url : options.getUrl,
-              data: options.data,
+              data: this.removeEmptyObjKey(options.data),
               res: options.transferResponse(res),
               hitID: options.hitID
             });
           } else {
             that.Log.enqueue({
               url: options.url ? options.url : options.getUrl,
-              data: options.data,
+              data: this.removeEmptyObjKey(options.data),
               res: res,
               hitID: options.hitID
             });
@@ -1826,6 +1826,16 @@ function () {
     key: "isonWechat",
     value: function isonWechat() {
       return (typeof wx === "undefined" ? "undefined" : _typeof(wx)) == 'object' ? true : false;
+    }
+  }, {
+    key: "removeEmptyObjKey",
+    value: function removeEmptyObjKey(obj) {
+      Object.keys(obj).forEach(function (key) {
+        if (obj[key] === undefined || !obj[key]) {
+          delete obj[key];
+        }
+      });
+      return obj;
     }
   }, {
     key: "send",
