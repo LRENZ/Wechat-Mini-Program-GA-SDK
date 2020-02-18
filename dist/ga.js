@@ -1679,7 +1679,7 @@ function () {
       var that = this;
       if (String(option) !== '[object Object]') return undefined;
       option.method = option.method ? option.method.toUpperCase() : 'POST';
-      option.data = option.data || {};
+      option.data = that.removeEmptyObjKey(option.data) || {};
       var formData = [];
 
       for (var key in option.data) {
@@ -1705,7 +1705,7 @@ function () {
               that.Log.enqueue({
                 type: "success",
                 url: option.url ? option.url : option.getUrl,
-                data: this.removeEmptyObjKey(options.data),
+                data: options.data,
                 res: option.validateHit ? transferResponse(xhr.response) : xhr.status,
                 hitID: option.hitID //transferResponse(xhr.response)
 
@@ -1720,7 +1720,7 @@ function () {
               that.Log.enqueue({
                 type: "success",
                 url: option.url ? option.url : option.getUrl,
-                data: this.removeEmptyObjKey(options.data),
+                data: options.data,
                 res: option.validateHit ? xhr.response : xhr.status,
                 hitID: option.hitID
               });
@@ -1733,7 +1733,7 @@ function () {
             //this.fail()
             that.Log.enqueue({
               type: "error",
-              data: this.removeEmptyObjKey(options.data),
+              data: options.data,
               url: option.url ? option.url : option.getUrl,
               res: option.validateHit ? xhr.response : "Error",
               hitID: option.hitID //data:option.data,
@@ -1767,10 +1767,11 @@ function () {
     value: function weRequest(options) {
       var that = this;
       var transferResponse = options.transferResponse;
+      options.data = this.removeEmptyObjKey(options.data);
       wx.request({
         url: options.url,
         method: options.method,
-        data: this.removeEmptyObjKey(options.data),
+        data: options.data,
         header: options.headers,
         timeout: options.wxRequestTimeout,
         success: function success(res) {
@@ -1779,7 +1780,7 @@ function () {
             that.Log.enqueue({
               type: "success",
               url: options.url ? options.url : options.getUrl,
-              data: this.removeEmptyObjKey(options.data),
+              data: options.data,
               res: options.transferResponse(res),
               hitID: options.hitID
             });
@@ -1787,7 +1788,7 @@ function () {
             that.Log.enqueue({
               type: "success",
               url: options.url ? options.url : options.getUrl,
-              data: this.removeEmptyObjKey(options.data),
+              data: options.data,
               res: res,
               hitID: options.hitID
             });
@@ -1803,14 +1804,14 @@ function () {
             that.Log.enqueue({
               type: "error",
               url: options.url ? options.url : options.getUrl,
-              data: this.removeEmptyObjKey(options.data),
+              data: options.data,
               res: options.transferResponse(res),
               hitID: options.hitID
             });
           } else {
             that.Log.enqueue({
               url: options.url ? options.url : options.getUrl,
-              data: this.removeEmptyObjKey(options.data),
+              data: options.data,
               res: res,
               hitID: options.hitID
             });

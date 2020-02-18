@@ -13,7 +13,7 @@ class Request {
       let that = this
       if (String(option) !== '[object Object]') return undefined
       option.method = option.method ? option.method.toUpperCase() : 'POST'
-      option.data = option.data || {}
+      option.data =that.removeEmptyObjKey(option.data) || {}
       var formData = []
       for (var key in option.data) {
         formData.push(''.concat(key, '=', option.data[key]))
@@ -37,7 +37,7 @@ class Request {
               that.Log.enqueue({
 				         type:"success",
                 url:option.url?option.url:option.getUrl,
-                data:this.removeEmptyObjKey(options.data),
+                data:options.data,
                 res:option.validateHit ? transferResponse(xhr.response): xhr.status,
                 hitID:option.hitID,
                 //transferResponse(xhr.response)
@@ -54,7 +54,7 @@ class Request {
               that.Log.enqueue({
 			        	type:"success",
                 url:option.url?option.url:option.getUrl,
-                data:this.removeEmptyObjKey(options.data),
+                data:options.data,
                 res:option.validateHit ? xhr.response : xhr.status,
                 hitID:option.hitID,
               })
@@ -67,7 +67,7 @@ class Request {
               //this.fail()
               that.Log.enqueue({
                 type:"error",
-                data:this.removeEmptyObjKey(options.data),
+                data:options.data,
                 url:option.url?option.url:option.getUrl,
                 res:option.validateHit ? xhr.response : "Error",
                 hitID:option.hitID,
@@ -100,10 +100,11 @@ class Request {
 weRequest(options){
   let that = this
    let {transferResponse} = options
+   options.data = this.removeEmptyObjKey(options.data)
    wx.request({
      url:options.url,
      method:options.method,
-     data:this.removeEmptyObjKey(options.data),
+     data:options.data,
      header:options.headers,
      timeout:options.wxRequestTimeout,
      success(res){
@@ -112,7 +113,7 @@ weRequest(options){
        that.Log.enqueue({
 		  type:"success",
          url:options.url?options.url:options.getUrl,
-         data:this.removeEmptyObjKey(options.data),
+         data:options.data,
          res:options.transferResponse(res),
          hitID:options.hitID,
        })
@@ -120,7 +121,7 @@ weRequest(options){
       that.Log.enqueue({
 		  type:"success",
          url:options.url?options.url:options.getUrl,
-         data:this.removeEmptyObjKey(options.data),
+         data:options.data,
          res:res,
          hitID:options.hitID,
        })
@@ -135,14 +136,14 @@ weRequest(options){
        that.Log.enqueue({
 		   type:"error",
          url:options.url?options.url:options.getUrl,
-         data:this.removeEmptyObjKey(options.data),
+         data:options.data,
          res:options.transferResponse(res),
          hitID:options.hitID,
        })
      }else{
        that.Log.enqueue({
          url:options.url?options.url:options.getUrl,
-         data:this.removeEmptyObjKey(options.data),
+         data:options.data,
          res:res,
          hitID:options.hitID,
        })
