@@ -1,6 +1,11 @@
 class Store{
-  constructor(){
+  constructor(name){
     this.GAlog = this.GAlog || this.getLog() || []
+    if(typeof name != "string"){
+      throw new Error("Logger Name must be string")
+    }
+
+    this.loggerName = name ||  "gaLog"
 
   }
   env(){
@@ -19,14 +24,14 @@ class Store{
     if(this.env() == "WEB"){
       this.GAlog.push(val)
       this.GAlog = this.GAlog.reverse()
-      window.localStorage.setItem("gaLog",JSON.stringify(this.GAlog));
+      window.localStorage.setItem(this.loggerName,JSON.stringify(this.GAlog));
       return this.getLog()
     }
 
     if(this.env() == "WECHAT"){
       this.GAlog.push(val)
-      this.GAlog = this.GAlog
-      wx.setStorage({key:"gaLog",data:this.GAlog})
+      this.GAlog = this.GAlog.reverse()
+      wx.setStorage({key:this.loggerName,data:this.GAlog})
       return this.getLog()
     }
 
@@ -41,7 +46,7 @@ class Store{
 
     if(this.env() == 'WECHAT'){
       this.GAlog = []
-      wx.removeStorage({key: 'gaLog'})
+      wx.removeStorage({key: this.loggerName})
       return this.getLog()
     }
     //wechat
@@ -51,14 +56,14 @@ class Store{
     if(this.env() == "WEB"){
       this.GAlog.shift()
       this.GAlog = this.GAlog.reverse()
-      window.localStorage.setItem("gaLog",JSON.stringify(this.GAlog));
+      window.localStorage.setItem(this.loggerName,JSON.stringify(this.GAlog));
       return this.getLog()
     }
 
     if(this.env() == "WECHAT"){
       this.GAlog.shift()
       this.GAlog = this.GAlog
-      wx.setStorage({key:"gaLog",data:this.GAlog})
+      wx.setStorage({key:this.loggerName,data:this.GAlog})
       return this.getLog()
     }
 
@@ -67,7 +72,7 @@ class Store{
 
   size(){
      let galog = this.getLog() || 0
-     console.log(galog)
+     //console.log(galog)
      return galog.length || 0
     //wechat
   }
@@ -78,17 +83,17 @@ class Store{
 
    getLog(){
      if(this.env() == "WECHAT"){
-       var t =wx.getStorageSync("gaLog")
+       var t =wx.getStorageSync(this.loggerName)
      }
-     console.log(t)
+     //console.log(t)
 
      return t
 
      if(this.env() == "WEB"){
        try{
-         return JSON.parse(window.localStorage.getItem("gaLog"))
+         return JSON.parse(window.localStorage.getItem(this.loggerName))
        }catch(e){
-         return window.localStorage.getItem("gaLog")
+         return window.localStorage.getItem(this.loggerName)
        };
      }
    }

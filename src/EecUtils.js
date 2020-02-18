@@ -1,41 +1,4 @@
-/*
-var t = {impresstion: [{
-      "id": "9bdd2",
-      "name": "Compton T-Shirt",
-      "price": "44.00",
-      "brand": "Compton",
-      "category": "T-Shirts",
-      "position": 0, 'list':"test",
-      "dimension1":"test"
-    },
-    {
-      "id": "6c3b0",
-      "name": "Zappix T-Shirt",
-      "price": "99.00",
-      "brand": "Zappix",
-      "category": "T-Shirts",
-      "position": 3,
-      'list':"leave"
-    },
-    {
-      "id": "6c3b0",
-      "name": "Zappix T-Shirt",
-      "price": "99.00",
-      "brand": "Zappix",
-      "category": "T-Shirts",
-      "position": 3,'list':'homepage'
-    },
 
-    {
-      "id": "6c3b0",
-      "name": "Zappix T-Shirt",
-      "price": "99.00",
-      "brand": "Zappix",
-      "category": "T-Shirts",
-      "position": 3,'list':'test'
-    }
-  ]}
-  */
 
   import _default from './config';
   function checkObjList(obj){
@@ -61,7 +24,7 @@ var t = {impresstion: [{
       }
 
       let lst = [...new Set(ls)]
-      console.log(lst)
+      //console.log(lst)
       for (let [i,v] of lst.entries()){
         listMapping.set(v,i+1)
       }
@@ -79,21 +42,21 @@ var t = {impresstion: [{
         ls.push("_not_set_")
       }
       let lst = [...new Set(ls)]
-      console.log(lst)
+      //console.log(lst)
       for (let [i,v] of lst.entries()){
         listMapping.set(v,i+1)
       }
       listMapping.set("type","some")
-      console.log(listMapping)
+      //console.log(listMapping)
       return listMapping
       }
 
       if(ls.length == imp.length){
         listMapping.set('len',lst.length)
       }
-      console.log(ls)
+      //console.log(ls)
       let lst = [...new Set(ls)]
-      console.log(lst)
+      //console.log(lst)
       for (let [i,v] of lst.entries()){
         listMapping.set(v,i+1)
       }
@@ -263,7 +226,7 @@ var t = {impresstion: [{
 
             }
 
-        console.log(product)
+        //console.log(product)
         return product
       }else{
           // no list on the object
@@ -417,7 +380,7 @@ var t = {impresstion: [{
       }
 
       if(v.hasOwnProperty('quantity')){
-        product[`pr${i+1}qt`] = v['name']
+        product[`pr${i+1}qt`] = v['quantity']
       }
 
       if(v.hasOwnProperty('coupon')){

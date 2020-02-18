@@ -1,6 +1,6 @@
-import MP from './mp'
+import GA from './ga'
 
-/*
+
 let UA=()=> "UA-71412438-1"
 
 let config = {
@@ -18,6 +18,7 @@ let config = {
     cd1:"custom dimension1",
     pal:'search result'
   },
+  LoggerName:"we",
   transferResponse(res){
     console.log("do something for the response")
     return res
@@ -31,17 +32,20 @@ let config = {
     console.log("Error")
   },
   //maxLogLength:10,
-  enableLogger:false,
+  enableLogger:true,
 }
-
-let GA = new MP(config)
+var t = [{
+     inputRegex:"/wechat",
+     outputName:"/map"
+}]
+let G = new GA(config)
 //window.GA= GA
-GA.interceptors.request.use(function(config) { // push a handler function before send request
-  console.log('check if the data was valid') // process data before send to GA
+G.interceptors.request.use(function(config) { // push a handler function before send request
+  config.data.dp  = G.weUtils.map(t, config.data.dp) // process data before send to GA
   return config;
 });
 
-GA.get({
+G.post({
   dp:"/wechat",
   t:'event',
   ec:"test",
@@ -83,19 +87,5 @@ productScopeCM:{
 
 })
 
-*/
 
-//let s = {
-  //debug:true,
-  //validateHit:true,
-  //proxyURL:"https://linpiner.com/",
-//}
-//let b = new MP(s)
-//window.test = new MP()
-//a.get("/debug/collect",{data:{test:1}})
-//a.post("/debug/collect",{data:{test:2}})
-//a.post({data:{tid:"UA-987654"}})
-//b.post({data:{'test':1}})
-//console.log(a.Interceptor)
-//window.a = a
-export default MP
+export default GA

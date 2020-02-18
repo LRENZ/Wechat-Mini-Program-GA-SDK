@@ -9,8 +9,8 @@ module.exports = function() {
     entry: './src/index.js',
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: dev ? 'mp.js' : 'mp.min.js',
-      sourceMapFilename: dev ? 'mp.map' : 'mp.min.map',
+      filename: dev ? 'ga.js' : 'ga.min.js',
+      sourceMapFilename: dev ? 'ga.map' : 'ga.min.map',
       libraryTarget: "commonjs2",
     },
     devtool: 'source-map',

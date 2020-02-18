@@ -58,8 +58,6 @@ class validation{
         throw new Error(`No ${that.x} on object`)
       }
       let re = new RegExp(this.regexL[x],'ig')
-      console.log(re)
-      console.log(obj[x])
       if(this.isString(x)){
       if(!String(obj[x]).match(re)){
         throw new Error(`${x} do not match ${that.regexL[x]}`)
@@ -79,7 +77,6 @@ class validation{
     }
 
     let objString = this.objectToParams(obj)
-    console.log(objString.length)
     if(objString.length > 8012){
       throw new Error("Hit was too long, hit length must under 8012")
     }

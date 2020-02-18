@@ -4,7 +4,7 @@ const _default = {
   proxyURL:'',
   GAdebugURL:"https://www.google-analytics.com/debug/collect",
   validateHit:false,
-  maxLogLength:20,
+  maxLogLength:10,
   GAURL:"https://www.google-analytics.com/collect",
   method: 'POST',
   headers: {
@@ -15,6 +15,7 @@ const _default = {
   wxRequestTimeout:2000,
   enableLogger:true,
   validateParams:true,
+  LoggerName:"gaLog",
 };
 
 

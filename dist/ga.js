@@ -127,44 +127,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-/*
-var t = {impresstion: [{
-      "id": "9bdd2",
-      "name": "Compton T-Shirt",
-      "price": "44.00",
-      "brand": "Compton",
-      "category": "T-Shirts",
-      "position": 0, 'list':"test",
-      "dimension1":"test"
-    },
-    {
-      "id": "6c3b0",
-      "name": "Zappix T-Shirt",
-      "price": "99.00",
-      "brand": "Zappix",
-      "category": "T-Shirts",
-      "position": 3,
-      'list':"leave"
-    },
-    {
-      "id": "6c3b0",
-      "name": "Zappix T-Shirt",
-      "price": "99.00",
-      "brand": "Zappix",
-      "category": "T-Shirts",
-      "position": 3,'list':'homepage'
-    },
-
-    {
-      "id": "6c3b0",
-      "name": "Zappix T-Shirt",
-      "price": "99.00",
-      "brand": "Zappix",
-      "category": "T-Shirts",
-      "position": 3,'list':'test'
-    }
-  ]}
-  */
 
 
 function checkObjList(obj) {
@@ -211,9 +173,9 @@ function impressionListIndex(imp) {
       }
     }
 
-    var _lst = _toConsumableArray(new Set(ls));
+    var _lst = _toConsumableArray(new Set(ls)); //console.log(lst)
 
-    console.log(_lst);
+
     var _iteratorNormalCompletion2 = true;
     var _didIteratorError2 = false;
     var _iteratorError2 = undefined;
@@ -277,9 +239,9 @@ function impressionListIndex(imp) {
       }
     }
 
-    var _lst2 = _toConsumableArray(new Set(ls));
+    var _lst2 = _toConsumableArray(new Set(ls)); //console.log(lst)
 
-    console.log(_lst2);
+
     var _iteratorNormalCompletion4 = true;
     var _didIteratorError4 = false;
     var _iteratorError4 = undefined;
@@ -307,20 +269,19 @@ function impressionListIndex(imp) {
       }
     }
 
-    listMapping.set("type", "some");
-    console.log(listMapping);
+    listMapping.set("type", "some"); //console.log(listMapping)
+
     return listMapping;
   }
 
   if (ls.length == imp.length) {
     listMapping.set('len', lst.length);
-  }
+  } //console.log(ls)
 
-  console.log(ls);
 
-  var lst = _toConsumableArray(new Set(ls));
+  var lst = _toConsumableArray(new Set(ls)); //console.log(lst)
 
-  console.log(lst);
+
   var _iteratorNormalCompletion5 = true;
   var _didIteratorError5 = false;
   var _iteratorError5 = undefined;
@@ -592,7 +553,8 @@ function () {
                 }
               }
             }
-          }
+          } //console.log(product)
+
         } catch (err) {
           _didIteratorError8 = true;
           _iteratorError8 = err;
@@ -608,7 +570,6 @@ function () {
           }
         }
 
-        console.log(product);
         return product;
       } else {
         // no list on the object
@@ -952,10 +913,16 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Store =
 /*#__PURE__*/
 function () {
-  function Store() {
+  function Store(name) {
     _classCallCheck(this, Store);
 
     this.GAlog = this.GAlog || this.getLog() || [];
+
+    if (typeof name != "string") {
+      throw new Error("Logger Name must be string");
+    }
+
+    this.loggerName = name || "gaLog";
   }
 
   _createClass(Store, [{
@@ -975,15 +942,15 @@ function () {
       if (this.env() == "WEB") {
         this.GAlog.push(val);
         this.GAlog = this.GAlog.reverse();
-        window.localStorage.setItem("gaLog", JSON.stringify(this.GAlog));
+        window.localStorage.setItem(this.loggerName, JSON.stringify(this.GAlog));
         return this.getLog();
       }
 
       if (this.env() == "WECHAT") {
         this.GAlog.push(val);
-        this.GAlog = this.GAlog;
+        this.GAlog = this.GAlog.reverse();
         wx.setStorage({
-          key: "gaLog",
+          key: this.loggerName,
           data: this.GAlog
         });
         return this.getLog();
@@ -1001,7 +968,7 @@ function () {
       if (this.env() == 'WECHAT') {
         this.GAlog = [];
         wx.removeStorage({
-          key: 'gaLog'
+          key: this.loggerName
         });
         return this.getLog();
       } //wechat
@@ -1013,7 +980,7 @@ function () {
       if (this.env() == "WEB") {
         this.GAlog.shift();
         this.GAlog = this.GAlog.reverse();
-        window.localStorage.setItem("gaLog", JSON.stringify(this.GAlog));
+        window.localStorage.setItem(this.loggerName, JSON.stringify(this.GAlog));
         return this.getLog();
       }
 
@@ -1021,7 +988,7 @@ function () {
         this.GAlog.shift();
         this.GAlog = this.GAlog;
         wx.setStorage({
-          key: "gaLog",
+          key: this.loggerName,
           data: this.GAlog
         });
         return this.getLog();
@@ -1031,8 +998,8 @@ function () {
   }, {
     key: "size",
     value: function size() {
-      var galog = this.getLog() || 0;
-      console.log(galog);
+      var galog = this.getLog() || 0; //console.log(galog)
+
       return galog.length || 0; //wechat
     }
   }, {
@@ -1044,17 +1011,17 @@ function () {
     key: "getLog",
     value: function getLog() {
       if (this.env() == "WECHAT") {
-        var t = wx.getStorageSync("gaLog");
-      }
+        var t = wx.getStorageSync(this.loggerName);
+      } //console.log(t)
 
-      console.log(t);
+
       return t;
 
       if (this.env() == "WEB") {
         try {
-          return JSON.parse(window.localStorage.getItem("gaLog"));
+          return JSON.parse(window.localStorage.getItem(this.loggerName));
         } catch (e) {
-          return window.localStorage.getItem("gaLog");
+          return window.localStorage.getItem(this.loggerName);
         }
 
         ;
@@ -1083,7 +1050,7 @@ var _default = {
   proxyURL: '',
   GAdebugURL: "https://www.google-analytics.com/debug/collect",
   validateHit: false,
-  maxLogLength: 20,
+  maxLogLength: 10,
   GAURL: "https://www.google-analytics.com/collect",
   method: 'POST',
   headers: {
@@ -1093,9 +1060,229 @@ var _default = {
   rest: '',
   wxRequestTimeout: 2000,
   enableLogger: true,
-  validateParams: true
+  validateParams: true,
+  LoggerName: "gaLog"
 };
 /* harmony default export */ __webpack_exports__["default"] = (_default);
+
+/***/ }),
+
+/***/ "./src/ga.js":
+/*!*******************!*\
+  !*** ./src/ga.js ***!
+  \*******************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config */ "./src/config.js");
+/* harmony import */ var _Interceptor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Interceptor */ "./src/Interceptor.js");
+/* harmony import */ var _request__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./request */ "./src/request.js");
+/* harmony import */ var _validation__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./validation */ "./src/validation.js");
+/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./helper */ "./src/helper.js");
+/* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./common */ "./src/common.js");
+/* harmony import */ var _EecUtils_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./EecUtils.js */ "./src/EecUtils.js");
+/* harmony import */ var _wechatUtils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./wechatUtils */ "./src/wechatUtils.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+
+
+
+
+
+
+
+var GA =
+/*#__PURE__*/
+function () {
+  function GA() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    _classCallCheck(this, GA);
+
+    this.weUtils = new _wechatUtils__WEBPACK_IMPORTED_MODULE_7__["default"]();
+    this["default"] = this.create(options);
+    this.interceptors = {
+      request: new _Interceptor__WEBPACK_IMPORTED_MODULE_1__["default"](),
+      response: new _Interceptor__WEBPACK_IMPORTED_MODULE_1__["default"]()
+    };
+    this.validation = new _validation__WEBPACK_IMPORTED_MODULE_3__["default"]();
+  }
+
+  _createClass(GA, [{
+    key: "getLog",
+    value: function getLog() {
+      var log = new _common__WEBPACK_IMPORTED_MODULE_5__["default"]();
+      return log.getLog();
+    }
+  }, {
+    key: "get",
+    value: function get() {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      var op = this._preprocessArgs("GET", args);
+
+      if (!op) {}
+
+      return this.request(op);
+    }
+  }, {
+    key: "post",
+    value: function post() {
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      var op = this._preprocessArgs('POST', args);
+
+      if (!op) {
+        return op;
+      }
+
+      return this.request(op);
+    }
+  }, {
+    key: "create",
+    value: function create() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      if (JSON.stringify(options) === '{}') throw new Error("Error : config could not empty!");
+
+      var config = _objectSpread({}, JSON.parse(JSON.stringify(_config__WEBPACK_IMPORTED_MODULE_0__["default"])), {}, options);
+
+      config.url = this.getEnvURL(config);
+
+      if ((typeof wx === "undefined" ? "undefined" : _typeof(wx)) == "object") {
+        config.data.ua = this.weUtils.generateUA();
+      }
+
+      _helper__WEBPACK_IMPORTED_MODULE_4__["default"].merge(config.data, config.defaultGaData);
+      return config;
+    }
+  }, {
+    key: "_preprocessArgs",
+    value: function _preprocessArgs(method) {
+      var options;
+
+      for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+        args[_key3 - 1] = arguments[_key3];
+      }
+
+      var arg = args.flat();
+
+      if (arg.length == 0) {
+        options = {
+          method: method,
+          url: this["default"].url
+        };
+      }
+
+      if (_typeof(arg[0]) == "object") {
+        options = {
+          method: method,
+          url: this["default"].url,
+          data: arg[0]
+        };
+      }
+
+      return options;
+    }
+  }, {
+    key: "getEnvURL",
+    value: function getEnvURL(config) {
+      if (config.debug && config.validateHit) {
+        return config.GAdebugURL;
+      }
+
+      if (config.debug) {
+        return config.GAURL;
+      }
+
+      if (!config.debug) {
+        return config.proxyURL;
+      }
+    }
+  }, {
+    key: "request",
+    value: function request(options) {
+      var optionCopy = _helper__WEBPACK_IMPORTED_MODULE_4__["default"].deepClone(options);
+      options.hitID = _helper__WEBPACK_IMPORTED_MODULE_4__["default"].generateUUID(); // 合并
+
+      var cog = options;
+      var mh = optionCopy.method;
+      var opData = optionCopy.data;
+      cog = _helper__WEBPACK_IMPORTED_MODULE_4__["default"].merge(cog, this["default"]); //helper.merge(cog,options)
+
+      cog.method = mh;
+      cog.data = _helper__WEBPACK_IMPORTED_MODULE_4__["default"].merge(cog.data, opData);
+      var cc = _helper__WEBPACK_IMPORTED_MODULE_4__["default"].deepClone(cog);
+
+      if (cc.data.hasOwnProperty("productScopeCD")) {
+        var cogCd = cc.data.productScopeCD || {};
+        delete cc.data.productScopeCD;
+      }
+
+      if (cog.data.hasOwnProperty("productScopeCM")) {
+        var cogCm = cc.data.productScopeCM || {};
+        delete cc.data.productScopeCM;
+      }
+
+      var eecobj = _EecUtils_js__WEBPACK_IMPORTED_MODULE_6__["default"].checkEEC(cc.data, cogCd, cogCm);
+      cc.data = Object.assign(cc.data, eecobj);
+
+      if (cc.data.hasOwnProperty("products")) {
+        delete cc.data.products;
+      }
+
+      if (cc.data.hasOwnProperty("promotions")) {
+        delete cc.data.promotions;
+      }
+
+      if (cc.data.hasOwnProperty("impresstion")) {
+        delete cc.data.impresstion;
+      }
+
+      var res = new _request__WEBPACK_IMPORTED_MODULE_2__["default"](cc);
+
+      if (cc.validateParams) {
+        this.validation.use(cc.data);
+      }
+
+      var _cc = cc,
+          transferRequest = _cc.transferRequest;
+      if (transferRequest) cc = transferRequest(cc); //delete cog.transferRequest
+      //delete this.default.transferRequest
+      //transferRequest = (cog) => cog;
+
+      var list = this.interceptors.request.list();
+      list.forEach(function (fn) {
+        cc = fn(cc);
+      });
+      return res.send(cc);
+    }
+  }]);
+
+  return GA;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (GA);
 
 /***/ }),
 
@@ -1251,107 +1438,94 @@ var helper = new helpers();
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _mp__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mp */ "./src/mp.js");
+/* harmony import */ var _ga__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ga */ "./src/ga.js");
 
-/*
-let UA=()=> "UA-71412438-1"
 
-let config = {
-  transferRequest(config){
-    console.log('do something before sending the hit')
-    //config.data.dp = "/test"
-    return config
+var UA = function UA() {
+  return "UA-71412438-1";
+};
+
+var config = {
+  transferRequest: function transferRequest(config) {
+    console.log('do something before sending the hit'); //config.data.dp = "/test"
+
+    return config;
   },
-  data:{  //common request payload
-    v:1,
-    cid:1234556,
-    tid:UA(),
-    dp:"placeholder",
-    ds:"wechat",
-    cd1:"custom dimension1",
-    pal:'search result'
+  data: {
+    //common request payload
+    v: 1,
+    cid: 1234556,
+    tid: UA(),
+    dp: "placeholder",
+    ds: "wechat",
+    cd1: "custom dimension1",
+    pal: 'search result'
   },
-  transferResponse(res){
-    console.log("do something for the response")
-    return res
+  LoggerName: "we",
+  transferResponse: function transferResponse(res) {
+    console.log("do something for the response");
+    return res;
   },
-  validateHit:false, // will send to the vvalidation endpoint(optional)
+  validateHit: false,
+  // will send to the vvalidation endpoint(optional)
   //proxyURL:"YOUR_PROXY_URL"
-  onSuccess(config){
-    console.log("success") //your custom success function (options)
+  onSuccess: function onSuccess(config) {
+    console.log("success"); //your custom success function (options)
   },
-  onError(config){
-    console.log("Error")
+  onError: function onError(config) {
+    console.log("Error");
   },
   //maxLogLength:10,
-  enableLogger:false,
-}
+  enableLogger: true
+};
+var t = [{
+  inputRegex: "/wechat",
+  outputName: "/map"
+}];
+var G = new _ga__WEBPACK_IMPORTED_MODULE_0__["default"](config); //window.GA= GA
 
-let GA = new MP(config)
-//window.GA= GA
-GA.interceptors.request.use(function(config) { // push a handler function before send request
-  console.log('check if the data was valid') // process data before send to GA
+G.interceptors.request.use(function (config) {
+  // push a handler function before send request
+  config.data.dp = G.weUtils.map(t, config.data.dp); // process data before send to GA
+
   return config;
 });
-
-GA.get({
-  dp:"/wechat",
-  t:'event',
-  ec:"test",
-  ea:"wechatSDK",
-  pa:"detail",
-  "products": [
-    {
-      "id": "bc823",
-      "name": "Fuelworks T-Shirt",
-      "price": "92.00",
-      "brand": "Fuelworks",
-      "category": "T-Shirts",
-      "position": "4"
-    },
-
-    {
-      "id": "bc843",
-      "name": " T-Shirt",
-      "price": "92.00",
-      "brand": "Fuelworks",
-      "category": "T-Shirts",
-      "position": "4"
-    },
-  ],
-    "promotions": [{
-  "id": "bts",
-  "name": "Back To School",
-  "creative": "HOME banner",
-  "position": "right sidebar"
-}],
-productScopeCD:{
-  '3':'cd3',
-  '6' : "cd6"
-},
-
-productScopeCM:{
-  '4':100,
-}
-
-})
-
-*/
-//let s = {
-//debug:true,
-//validateHit:true,
-//proxyURL:"https://linpiner.com/",
-//}
-//let b = new MP(s)
-//window.test = new MP()
-//a.get("/debug/collect",{data:{test:1}})
-//a.post("/debug/collect",{data:{test:2}})
-//a.post({data:{tid:"UA-987654"}})
-//b.post({data:{'test':1}})
-//console.log(a.Interceptor)
-//window.a = a
-
-/* harmony default export */ __webpack_exports__["default"] = (_mp__WEBPACK_IMPORTED_MODULE_0__["default"]);
+G.post({
+  dp: "/wechat",
+  t: 'event',
+  ec: "test",
+  ea: "wechatSDK",
+  pa: "detail",
+  "products": [{
+    "id": "bc823",
+    "name": "Fuelworks T-Shirt",
+    "price": "92.00",
+    "brand": "Fuelworks",
+    "category": "T-Shirts",
+    "position": "4"
+  }, {
+    "id": "bc843",
+    "name": " T-Shirt",
+    "price": "92.00",
+    "brand": "Fuelworks",
+    "category": "T-Shirts",
+    "position": "4"
+  }],
+  "promotions": [{
+    "id": "bts",
+    "name": "Back To School",
+    "creative": "HOME banner",
+    "position": "right sidebar"
+  }],
+  productScopeCD: {
+    '3': 'cd3',
+    '6': "cd6"
+  },
+  productScopeCM: {
+    '4': 100
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (_ga__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -1387,7 +1561,7 @@ function () {
   function Logger(config) {
     _classCallCheck(this, Logger);
 
-    this.log = new _common__WEBPACK_IMPORTED_MODULE_0__["default"]();
+    this.log = new _common__WEBPACK_IMPORTED_MODULE_0__["default"](config.LoggerName);
     this.maxLogLength = config.maxLogLength;
     this.enableLogger = config.enableLogger;
     this.init();
@@ -1463,244 +1637,6 @@ function () {
 
 /***/ }),
 
-/***/ "./src/mp.js":
-/*!*******************!*\
-  !*** ./src/mp.js ***!
-  \*******************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config */ "./src/config.js");
-/* harmony import */ var _Interceptor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Interceptor */ "./src/Interceptor.js");
-/* harmony import */ var _request__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./request */ "./src/request.js");
-/* harmony import */ var _validation__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./validation */ "./src/validation.js");
-/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./helper */ "./src/helper.js");
-/* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./common */ "./src/common.js");
-/* harmony import */ var _EecUtils_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./EecUtils.js */ "./src/EecUtils.js");
-/* harmony import */ var _wechatUtils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./wechatUtils */ "./src/wechatUtils.js");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-
-
-
-
-
-
-
-
-
-
-var MP =
-/*#__PURE__*/
-function () {
-  function MP() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    _classCallCheck(this, MP);
-
-    this["default"] = this.create(options);
-    this.interceptors = {
-      request: new _Interceptor__WEBPACK_IMPORTED_MODULE_1__["default"](),
-      response: new _Interceptor__WEBPACK_IMPORTED_MODULE_1__["default"]()
-    };
-    this.wechatUtils = _wechatUtils__WEBPACK_IMPORTED_MODULE_7__["default"];
-    this.validation = new _validation__WEBPACK_IMPORTED_MODULE_3__["default"]();
-  }
-
-  _createClass(MP, [{
-    key: "getLog",
-    value: function getLog() {
-      var log = new _common__WEBPACK_IMPORTED_MODULE_5__["default"]();
-      return log.getLog();
-    }
-  }, {
-    key: "get",
-    value: function get() {
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      var op = this._preprocessArgs("GET", args);
-
-      if (!op) {}
-
-      return this.request(op);
-    }
-  }, {
-    key: "post",
-    value: function post() {
-      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
-      }
-
-      console.log(args);
-
-      var op = this._preprocessArgs('POST', args);
-
-      if (!op) {
-        return op;
-      }
-
-      return this.request(op);
-    }
-  }, {
-    key: "create",
-    value: function create() {
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      if (JSON.stringify(options) === '{}') throw new Error("Error : config could not empty!");
-
-      var config = _objectSpread({}, JSON.parse(JSON.stringify(_config__WEBPACK_IMPORTED_MODULE_0__["default"])), {}, options);
-
-      config.url = this.getEnvURL(config);
-      _helper__WEBPACK_IMPORTED_MODULE_4__["default"].merge(config.data, config.defaultGaData);
-      return config;
-    }
-  }, {
-    key: "_preprocessArgs",
-    value: function _preprocessArgs(method) {
-      var options;
-
-      for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-        args[_key3 - 1] = arguments[_key3];
-      }
-
-      var arg = args.flat();
-      /*if(arg[0].hasOwnProperty("productScopeCD")){
-        var cogCd = arg[0].productScopeCD || {}
-        delete arg[0].productScopeCD
-      }
-          if(arg[0].hasOwnProperty("productScopeCM")){
-          var cogCm =arg[0].productScopeCM || {}
-          delete arg[0].productScopeCM
-        }
-      let eecobj = eec.checkEEC(arg[0],cogCd,cogCm)
-      helper.merge(arg[0],eecobj)
-      */
-
-      if (arg.length == 0) {
-        options = {
-          method: method,
-          url: this["default"].url
-        };
-      }
-
-      if (_typeof(arg[0]) == "object") {
-        options = {
-          method: method,
-          url: this["default"].url,
-          data: arg[0]
-        };
-      }
-
-      return options;
-    }
-  }, {
-    key: "getEnvURL",
-    value: function getEnvURL(config) {
-      if (config.debug && config.validateHit) {
-        return config.GAdebugURL;
-      }
-
-      if (config.debug) {
-        return config.GAURL;
-      }
-
-      if (!config.debug) {
-        return config.proxyURL;
-      }
-    }
-  }, {
-    key: "request",
-    value: function request(options) {
-      var optionCopy = _helper__WEBPACK_IMPORTED_MODULE_4__["default"].deepClone(options);
-      options.hitID = _helper__WEBPACK_IMPORTED_MODULE_4__["default"].generateUUID(); // 合并
-
-      var cog = options;
-      var mh = optionCopy.method;
-      var opData = optionCopy.data;
-      cog = _helper__WEBPACK_IMPORTED_MODULE_4__["default"].merge(cog, this["default"]); //helper.merge(cog,options)
-
-      cog.method = mh;
-      cog.data = _helper__WEBPACK_IMPORTED_MODULE_4__["default"].merge(cog.data, opData); // 检验参数
-      //替换 baseURL
-      //cog.url = this.getEnvURL(cog)
-      //console.log(cog)
-      // 变换下请求
-
-      var cc = _helper__WEBPACK_IMPORTED_MODULE_4__["default"].deepClone(cog);
-
-      if (cc.data.hasOwnProperty("productScopeCD")) {
-        var cogCd = cc.data.productScopeCD || {};
-        delete cc.data.productScopeCD;
-      }
-
-      if (cog.data.hasOwnProperty("productScopeCM")) {
-        var cogCm = cc.data.productScopeCM || {};
-        delete cc.data.productScopeCM;
-      }
-
-      var eecobj = _EecUtils_js__WEBPACK_IMPORTED_MODULE_6__["default"].checkEEC(cc.data, cogCd, cogCm);
-      cc.data = Object.assign(cc.data, eecobj);
-
-      if (cc.data.hasOwnProperty("products")) {
-        delete cc.data.products;
-      }
-
-      if (cc.data.hasOwnProperty("promotions")) {
-        delete cc.data.promotions;
-      }
-
-      if (cc.data.hasOwnProperty("impresstion")) {
-        delete cc.data.impresstion;
-      }
-
-      var res = new _request__WEBPACK_IMPORTED_MODULE_2__["default"](cc);
-
-      if (cc.validateParams) {
-        this.validation.use(cc.data);
-      }
-
-      var _cc = cc,
-          transferRequest = _cc.transferRequest;
-      if (transferRequest) cc = transferRequest(cc); //delete cog.transferRequest
-      //delete this.default.transferRequest
-      //transferRequest = (cog) => cog;
-
-      var list = this.interceptors.request.list();
-      list.forEach(function (fn) {
-        cc = fn(cc);
-      }); //window.cog = cog
-      //window.cog = cog
-      //window.res= res
-      //cog.success = this.onSuccess
-      //cog.fail = this.onError
-      // 正式请求
-
-      return res.send(cc);
-    }
-  }]);
-
-  return MP;
-}();
-
-/* harmony default export */ __webpack_exports__["default"] = (MP);
-
-/***/ }),
-
 /***/ "./src/request.js":
 /*!************************!*\
   !*** ./src/request.js ***!
@@ -1754,8 +1690,8 @@ function () {
         option.getUrl = option.url + "?" + option.data;
       }
 
-      var transferResponse = option.transferResponse;
-      console.log(option);
+      var transferResponse = option.transferResponse; //console.log(option)
+
       var xhr = new XMLHttpRequest();
       xhr.responseType = option.responseType || 'json';
 
@@ -1763,7 +1699,7 @@ function () {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
             if (transferResponse) {
-              console.log(xhr.response);
+              //console.log(xhr.response)
               that.Log.enqueue({
                 type: "success",
                 url: option.url ? option.url : option.getUrl,
@@ -1835,8 +1771,7 @@ function () {
         header: options.headers,
         timeout: options.wxRequestTimeout,
         success: function success(res) {
-          console.log(res);
-
+          //console.log(res)
           if (transferResponse) {
             that.Log.enqueue({
               type: "success",
@@ -1860,8 +1795,7 @@ function () {
           }
         },
         fail: function fail(res) {
-          console.log(res);
-
+          //console.log(res)
           if (transferResponse) {
             that.Log.enqueue({
               type: "error",
@@ -2037,8 +1971,6 @@ function () {
         }
 
         var re = new RegExp(this.regexL[x], 'ig');
-        console.log(re);
-        console.log(obj[x]);
 
         if (this.isString(x)) {
           if (!String(obj[x]).match(re)) {
@@ -2060,7 +1992,6 @@ function () {
       }
 
       var objString = this.objectToParams(obj);
-      console.log(objString.length);
 
       if (objString.length > 8012) {
         throw new Error("Hit was too long, hit length must under 8012");
@@ -2235,6 +2166,43 @@ var SceneMapping = {
   "default": "unknow scene value"
 };
 
+var Mapping =
+/*#__PURE__*/
+function () {
+  function Mapping() {
+    _classCallCheck(this, Mapping);
+
+    this.currentMap = {};
+    this.currentOutput = "";
+  }
+
+  _createClass(Mapping, [{
+    key: "getMap",
+    value: function getMap() {
+      return this.map;
+    }
+  }, {
+    key: "Mapping",
+    value: function Mapping(map, input) {
+      var current = map.find(function (item) {
+        return input.match(new RegExp(item.inputRegex, "i"));
+      }) || {};
+      this.currentMap = current;
+      this.currentOutput = current.outputName;
+      return current.outputName;
+    }
+  }, {
+    key: "getOutput",
+    value: function getOutput() {
+      return this.currentOutput;
+    }
+  }]);
+
+  return Mapping;
+}();
+
+var m = new Mapping();
+
 var wechatUtils =
 /*#__PURE__*/
 function () {
@@ -2247,6 +2215,11 @@ function () {
     value: function construct(sMapping) {
       this.onWechat = this.isOnwechat();
       this.SMapping = sMapping || SceneMapping;
+    }
+  }, {
+    key: "map",
+    value: function map(table, field) {
+      return m.Mapping(table, field);
     }
   }, {
     key: "isOnwechat",
@@ -2306,4 +2279,4 @@ function () {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=mp.map
+//# sourceMappingURL=ga.map

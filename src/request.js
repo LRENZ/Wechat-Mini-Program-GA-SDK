@@ -26,7 +26,7 @@ class Request {
       }
       let {transferResponse} = option
 
-      console.log(option)
+      //console.log(option)
       var xhr = new XMLHttpRequest()
       xhr.responseType = option.responseType || 'json'
       xhr.onreadystatechange = function () {
@@ -34,9 +34,9 @@ class Request {
           if (xhr.status === 200) {
             if(transferResponse)
             {
-              console.log(xhr.response)
+              //console.log(xhr.response)
               that.Log.enqueue({
-				type:"success",
+				         type:"success",
                 url:option.url?option.url:option.getUrl,
                 data:option.data,
                 res:option.validateHit ? transferResponse(xhr.response): xhr.status,
@@ -107,7 +107,7 @@ weRequest(options){
      header:options.headers,
      timeout:options.wxRequestTimeout,
      success(res){
-       console.log(res)
+       //console.log(res)
        if(transferResponse){
        that.Log.enqueue({
 		  type:"success",
@@ -130,7 +130,7 @@ weRequest(options){
        }
      },
      fail(res){
-       console.log(res)
+       //console.log(res)
        if(transferResponse){
        that.Log.enqueue({
 		   type:"error",

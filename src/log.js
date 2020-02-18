@@ -3,7 +3,7 @@ import helper from './helper'
 
 class Logger {
   constructor(config){
-    this.log = new Store()
+    this.log = new Store(config.LoggerName)
     this.maxLogLength = config.maxLogLength
     this.enableLogger = config.enableLogger
     this.init()

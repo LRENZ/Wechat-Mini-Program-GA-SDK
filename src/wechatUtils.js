@@ -71,11 +71,40 @@ const SceneMapping = {
   };
 
 
+  class Mapping {
+      constructor() {
+          this.currentMap = {}
+          this.currentOutput = ""
+      }
+
+      getMap() {
+          return this.map
+      }
+      Mapping(map,input){
+        const current = map.find(item => input.match(new RegExp(item.inputRegex,"i"))) || {}
+        this.currentMap = current
+        this.currentOutput =  current.outputName
+        return current.outputName
+      }
+
+      getOutput() {
+          return this.currentOutput
+      }
+  }
+
+  var m = new Mapping()
+
+
 class wechatUtils{
   construct(sMapping){
     this.onWechat = this.isOnwechat()
     this.SMapping = sMapping || SceneMapping
   }
+
+  map(table,field){
+    return m.Mapping(table,field)
+  }
+
   isOnwechat(){
     if(typeof wx == 'object'){
       return true
@@ -111,8 +140,11 @@ class wechatUtils{
     }
     return ''
   }
-
-
 }
+
+
+
+
+
 
 export default wechatUtils

@@ -7,14 +7,15 @@ import Store from './common'
 import eec from './EecUtils.js'
 import wechatUtils from './wechatUtils'
 import validation from './validation.js'
-class MP{
+class GA{
   constructor(options = {} ){
+    this.weUtils = new wechatUtils()
     this.default = this.create(options)
    this.interceptors = {
     request: new Interceptor(),
   response: new Interceptor(),
-};
-    this.wechatUtils = wechatUtils
+}
+
     this.validation = new validation()
   }
 
@@ -33,7 +34,6 @@ class MP{
   }
 
   post(...args) {
-    console.log(args)
     let op = this._preprocessArgs('POST', args);
     if (!op) {
       return op
@@ -43,13 +43,18 @@ class MP{
 
 
   create(options = {}){
+
     if(JSON.stringify(options) === '{}') throw new Error("Error : config could not empty!")
     let config = {
     ...JSON.parse(JSON.stringify(_default)),
     ...options
   };
   config.url = this.getEnvURL(config)
+  if(typeof wx == "object"){
+    config.data.ua = this.weUtils.generateUA()
+  }
   helper.merge(config.data,config.defaultGaData)
+
     return config;
   }
 
@@ -59,18 +64,6 @@ class MP{
 
   let options;
   let arg = args.flat()
-  /*if(arg[0].hasOwnProperty("productScopeCD")){
-    var cogCd = arg[0].productScopeCD || {}
-    delete arg[0].productScopeCD
-  }
-
-    if(arg[0].hasOwnProperty("productScopeCM")){
-      var cogCm =arg[0].productScopeCM || {}
-      delete arg[0].productScopeCM
-    }
-  let eecobj = eec.checkEEC(arg[0],cogCd,cogCm)
-  helper.merge(arg[0],eecobj)
-  */
   if(arg.length == 0){
     options ={
       method,
@@ -83,6 +76,7 @@ class MP{
       url:this.default.url,
     data:arg[0]}
   }
+
   return options;
 }
 
@@ -113,12 +107,6 @@ request(options){
   //helper.merge(cog,options)
   cog.method = mh
   cog.data = helper.merge(cog.data,opData)
-  // 检验参数
-  //替换 baseURL
-  //cog.url = this.getEnvURL(cog)
-  //console.log(cog)
-
-  // 变换下请求
 
   var cc = helper.deepClone(cog)
   if(cc.data.hasOwnProperty("productScopeCD")){
@@ -160,17 +148,10 @@ request(options){
   cc = fn(cc);
 });
 
-
-  //window.cog = cog
-  //window.cog = cog
-  //window.res= res
-  //cog.success = this.onSuccess
-  //cog.fail = this.onError
-  // 正式请求
   return res.send(cc)
 }
 
 
 }
 
-export default MP
+export default GA
