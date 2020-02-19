@@ -2,10 +2,10 @@
 # Wechat Mini Program GA SDK 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-一个基于基于mearsurement protocol 封装的微信小程序 SDK. 支持以下特性
+一个基于 Mearsurement Protocol 封装的微信小程序 SDK. 支持以下特性
  - Axios-like API, 支持config, transferRequest, transferReponse, Interceptor, API 灵活简单
  - 内置 Logger 功能, 方便调试和检查数据发送状态
- - 内置有用的工具函数
+ - 内置有用的工具函数, 例如 参数检验, regex table
  - 基于 webpack 开发,易于拓展
  - 同时支持小程序和浏览器
 
@@ -69,9 +69,9 @@ const GA = new GA()
 
 ```js
 App({
-        ...
-        GA
-        ...
+        ...,
+        GA,
+        ...,
     })
 ```
 **Track Pageview**
@@ -132,7 +132,7 @@ const Eventconfig = {
   proxyURL : "YOUR_PROXY_URL" // Wechat mini program is not allowed to send to GA server directly, you will require a middle server to forward the hits
 }
 
-const GAEventTracker = new GA()A()
+const GAEventTracker = new GA()
 ```
 
 
