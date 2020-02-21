@@ -1,6 +1,6 @@
 
 const _default = {
-  debug:true,
+  debug:false,
   proxyURL:'',
   GAdebugURL:"https://www.google-analytics.com/debug/collect",
   validateHit:false,

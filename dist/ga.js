@@ -998,8 +998,7 @@ function () {
   }, {
     key: "size",
     value: function size() {
-      var galog = this.getLog() || 0; //console.log(galog)
-
+      var galog = this.getLog() || 0;
       return galog.length || 0; //wechat
     }
   }, {
@@ -1012,10 +1011,9 @@ function () {
     value: function getLog() {
       if (this.env() == "WECHAT") {
         var t = wx.getStorageSync(this.loggerName);
+        return t;
       } //console.log(t)
 
-
-      return t;
 
       if (this.env() == "WEB") {
         try {
@@ -1046,7 +1044,7 @@ function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 var _default = {
-  debug: true,
+  debug: false,
   proxyURL: '',
   GAdebugURL: "https://www.google-analytics.com/debug/collect",
   validateHit: false,
@@ -1084,13 +1082,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./common */ "./src/common.js");
 /* harmony import */ var _EecUtils_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./EecUtils.js */ "./src/EecUtils.js");
 /* harmony import */ var _wechatUtils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./wechatUtils */ "./src/wechatUtils.js");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1123,13 +1121,68 @@ function () {
       response: new _Interceptor__WEBPACK_IMPORTED_MODULE_1__["default"]()
     };
     this.validation = new _validation__WEBPACK_IMPORTED_MODULE_3__["default"]();
+    this.res = new _request__WEBPACK_IMPORTED_MODULE_2__["default"](this["default"]);
   }
 
   _createClass(GA, [{
     key: "getLog",
     value: function getLog() {
-      var log = new _common__WEBPACK_IMPORTED_MODULE_5__["default"]();
-      return log.getLog();
+      if ((typeof wx === "undefined" ? "undefined" : _typeof(wx)) == "object") {
+        var t = wx.getStorageSync(this["default"].LoggerName);
+        return t;
+      }
+
+      if (!!document.URL) {
+        try {
+          return JSON.parse(window.localStorage.getItem(this["default"].LoggerName));
+        } catch (e) {
+          return window.localStorage.getItem(this["default"].LoggerName);
+        }
+
+        ;
+      }
+    }
+  }, {
+    key: "getLogByHitId",
+    value: function getLogByHitId(id) {
+      var l = this.getLog();
+      var lobj = l.filter(function (n) {
+        return n['hitID'] == id;
+      });
+      return lobj[0] || undefined;
+    }
+  }, {
+    key: "removeLogByHitId",
+    value: function removeLogByHitId(id) {
+      var l = this.getLog();
+      var lobj = l.filter(function (n) {
+        return n['hitID'] != id;
+      });
+      this.setLog(lobj);
+      return lobj;
+    }
+  }, {
+    key: "setLog",
+    value: function setLog(log) {
+      if ((typeof wx === "undefined" ? "undefined" : _typeof(wx)) == "object") {
+        var t = wx.setStorage({
+          key: this["default"].LoggerName,
+          data: log
+        });
+        return t;
+      }
+
+      console.log("test");
+
+      if (!!document.URL) {
+        try {
+          return window.localStorage.setItem(this["default"].LoggerName, JSON.stringify(log));
+        } catch (e) {
+          console.log(e);
+        }
+
+        ;
+      }
     }
   }, {
     key: "get",
@@ -1207,16 +1260,20 @@ function () {
   }, {
     key: "getEnvURL",
     value: function getEnvURL(config) {
-      if (config.debug && config.validateHit) {
-        return config.GAdebugURL;
+      if (!!config.proxyURL) {
+        return config.proxyURL;
       }
 
       if (config.debug) {
         return config.GAURL;
       }
 
-      if (!config.debug) {
-        return config.proxyURL;
+      if (config.debug && config.validateHit) {
+        return config.GAdebugURL;
+      }
+
+      if (!config.debug && !config.proxyURL) {
+        throw new Error("if you are on the prod env, then Proxy URL require");
       }
     }
   }, {
@@ -1259,8 +1316,6 @@ function () {
         delete cc.data.impresstion;
       }
 
-      var res = new _request__WEBPACK_IMPORTED_MODULE_2__["default"](cc);
-
       if (cc.validateParams) {
         this.validation.use(cc.data);
       }
@@ -1275,7 +1330,7 @@ function () {
       list.forEach(function (fn) {
         cc = fn(cc);
       });
-      return res.send(cc);
+      return this.res.send(cc);
     }
   }]);
 
@@ -1458,7 +1513,6 @@ let config = {
     cd1:"custom dimension1",
     pal:'search result'
   },
-  LoggerName:"we",
   transferResponse(res){
     console.log("do something for the response")
     return res
@@ -1473,6 +1527,7 @@ let config = {
   },
   //maxLogLength:10,
   enableLogger:true,
+  LoggerName:"we"
 }
 var t = [{
      inputRegex:"/wechat",
@@ -1526,6 +1581,15 @@ productScopeCM:{
 }
 
 })
+
+G.post({
+	dp:"test"
+})
+
+G.post({
+	dp:"1"
+})
+
 */
 
 /* harmony default export */ __webpack_exports__["default"] = (_ga__WEBPACK_IMPORTED_MODULE_0__["default"]);
@@ -1564,10 +1628,10 @@ function () {
   function Logger(config) {
     _classCallCheck(this, Logger);
 
-    this.log = new _common__WEBPACK_IMPORTED_MODULE_0__["default"](config.LoggerName);
+    this.log = new _common__WEBPACK_IMPORTED_MODULE_0__["default"](config.LoggerName); //this.init()
+
     this.maxLogLength = config.maxLogLength;
     this.enableLogger = config.enableLogger;
-    this.init();
   }
 
   _createClass(Logger, [{
@@ -1705,7 +1769,7 @@ function () {
               that.Log.enqueue({
                 type: "success",
                 url: option.url ? option.url : option.getUrl,
-                data: options.data,
+                data: option.data,
                 res: option.validateHit ? transferResponse(xhr.response) : xhr.status,
                 hitID: option.hitID //transferResponse(xhr.response)
 
@@ -1720,7 +1784,7 @@ function () {
               that.Log.enqueue({
                 type: "success",
                 url: option.url ? option.url : option.getUrl,
-                data: options.data,
+                data: option.data,
                 res: option.validateHit ? xhr.response : xhr.status,
                 hitID: option.hitID
               });
@@ -1733,7 +1797,7 @@ function () {
             //this.fail()
             that.Log.enqueue({
               type: "error",
-              data: options.data,
+              data: option.data,
               url: option.url ? option.url : option.getUrl,
               res: option.validateHit ? xhr.response : "Error",
               hitID: option.hitID //data:option.data,
@@ -2203,7 +2267,7 @@ function () {
       }) || {};
       this.currentMap = current;
       this.currentOutput = current.outputName;
-      return current.outputName;
+      return current.outputName || input;
     }
   }, {
     key: "getOutput",

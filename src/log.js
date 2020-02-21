@@ -4,9 +4,10 @@ import helper from './helper'
 class Logger {
   constructor(config){
     this.log = new Store(config.LoggerName)
+    //this.init()
     this.maxLogLength = config.maxLogLength
     this.enableLogger = config.enableLogger
-    this.init()
+
   }
 
   init(){
@@ -18,8 +19,7 @@ class Logger {
       {
          time:helper.formatTime(new Date),
          Launch:"Logger Init"
-      }
-    )
+      })
   }
   }
 

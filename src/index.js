@@ -18,7 +18,6 @@ let config = {
     cd1:"custom dimension1",
     pal:'search result'
   },
-  LoggerName:"we",
   transferResponse(res){
     console.log("do something for the response")
     return res
@@ -33,6 +32,7 @@ let config = {
   },
   //maxLogLength:10,
   enableLogger:true,
+  LoggerName:"we"
 }
 var t = [{
      inputRegex:"/wechat",
@@ -86,7 +86,14 @@ productScopeCM:{
 }
 
 })
+
+G.post({
+	dp:"test"
+})
+
+G.post({
+	dp:"1"
+})
+
 */
-
-
 export default GA

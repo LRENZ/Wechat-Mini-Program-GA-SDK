@@ -72,7 +72,6 @@ class Store{
 
   size(){
      let galog = this.getLog() || 0
-     //console.log(galog)
      return galog.length || 0
     //wechat
   }
@@ -84,10 +83,11 @@ class Store{
    getLog(){
      if(this.env() == "WECHAT"){
        var t =wx.getStorageSync(this.loggerName)
+       return t
      }
      //console.log(t)
 
-     return t
+
 
      if(this.env() == "WEB"){
        try{

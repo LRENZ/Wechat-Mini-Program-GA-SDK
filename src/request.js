@@ -37,7 +37,7 @@ class Request {
               that.Log.enqueue({
 				         type:"success",
                 url:option.url?option.url:option.getUrl,
-                data:options.data,
+                data:option.data,
                 res:option.validateHit ? transferResponse(xhr.response): xhr.status,
                 hitID:option.hitID,
                 //transferResponse(xhr.response)
@@ -54,7 +54,7 @@ class Request {
               that.Log.enqueue({
 			        	type:"success",
                 url:option.url?option.url:option.getUrl,
-                data:options.data,
+                data:option.data,
                 res:option.validateHit ? xhr.response : xhr.status,
                 hitID:option.hitID,
               })
@@ -67,7 +67,7 @@ class Request {
               //this.fail()
               that.Log.enqueue({
                 type:"error",
-                data:options.data,
+                data:option.data,
                 url:option.url?option.url:option.getUrl,
                 res:option.validateHit ? xhr.response : "Error",
                 hitID:option.hitID,

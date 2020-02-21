@@ -84,7 +84,7 @@ const SceneMapping = {
         const current = map.find(item => input.match(new RegExp(item.inputRegex,"i"))) || {}
         this.currentMap = current
         this.currentOutput =  current.outputName
-        return current.outputName
+        return current.outputName || input
       }
 
       getOutput() {

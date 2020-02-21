@@ -17,13 +17,52 @@ class GA{
 }
 
     this.validation = new validation()
+    this.res = new Request(this.default)
   }
 
-   getLog(){
-     let log = new Store();
+  getLog(){
+    if( typeof wx == "object"){
+      let t =wx.getStorageSync(this.default.LoggerName)
+      return t
+    }
+    if(!!document.URL){
+      try{
+        return JSON.parse(window.localStorage.getItem(this.default.LoggerName))
+      }catch(e){
+        return window.localStorage.getItem(this.default.LoggerName)
+      };
+    }
+  }
 
-     return log.getLog();
-   }
+  getLogByHitId(id){
+    let l = this.getLog()
+    let lobj = l.filter(n => n['hitID'] == id)
+    return lobj[0] || undefined
+  }
+
+  removeLogByHitId(id){
+    let l = this.getLog()
+    let lobj = l.filter(n => n['hitID'] != id)
+    this.setLog(lobj)
+    return lobj
+  }
+
+  setLog(log){
+    if( typeof wx == "object"){
+      let t =wx.setStorage({key:this.default.LoggerName,data:log})
+      return t
+    }
+    console.log("test")
+    if(!!document.URL){
+      try{
+        return  window.localStorage.setItem(this.default.LoggerName,JSON.stringify(log));
+      }catch(e){
+        console.log(e)
+      };
+
+    }
+
+  }
 
   get(...args){
    let op = this._preprocessArgs("GET",args)
@@ -82,14 +121,20 @@ class GA{
 
 
 getEnvURL(config){
-  if(config.debug && config.validateHit){
-    return config.GAdebugURL
+  if(!!config.proxyURL){
+    return config.proxyURL
   }
+
   if(config.debug){
     return config.GAURL
   }
-  if(!config.debug){
-    return config.proxyURL
+
+  if(config.debug && config.validateHit){
+    return config.GAdebugURL
+  }
+
+  if(!config.debug && !config.proxyURL){
+    throw new Error("if you are on the prod env, then Proxy URL require")
   }
 }
 
@@ -132,7 +177,7 @@ request(options){
   if(cc.data.hasOwnProperty("impresstion")){
     delete cc.data.impresstion
   }
-   const res = new Request(cc)
+
    if(cc.validateParams){
      this.validation.use(cc.data)
    }
@@ -148,7 +193,7 @@ request(options){
   cc = fn(cc);
 });
 
-  return res.send(cc)
+  return this.res.send(cc)
 }
 
 
