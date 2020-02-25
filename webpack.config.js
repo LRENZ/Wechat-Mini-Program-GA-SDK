@@ -2,7 +2,7 @@ const path = require('path');
 
 
 module.exports = function() {
-  const dev = true;
+  const dev = false;
 
   return {
     mode: dev ? 'development' : 'production',

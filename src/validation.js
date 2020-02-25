@@ -2,7 +2,7 @@
 class validation{
   constructor(){
    this.v = this.init()
-   this.requireList = ['tid','v']
+   this.requireList = ['tid','v','cid']
    //this.anyList = [['dp','dl','dh']]
    this.regexL = {
      "tid":"UA-[0-9]*-[0-9]*"

@@ -9,6 +9,7 @@ let config = {
     //config.data.dp = "/test"
     return config
   },
+  debug:true,
   data:{  //common request payload
     v:1,
     cid:1234556,
@@ -51,6 +52,25 @@ G.post({
   ec:"test",
   ea:"wechatSDK",
   pa:"detail",
+  impressions:[{
+      "id": "b55da",
+      "name": "Flexigen T-Shirt",
+      "price": "16.00",
+      "brand": "Flexigen",
+      "category": "T-Shirts",
+      "position": 0,
+	  "list": "top10"
+    },
+    {
+      "id": "f6be8",
+      "name": "Comverges T-Shirt",
+      "price": "33.00",
+      "brand": "Comverges",
+      "category": "T-Shirts",
+      "position": 1,
+	  "list": "top10"
+  }],
+
   "products": [
     {
       "id": "bc823",
@@ -84,16 +104,16 @@ productScopeCD:{
 productScopeCM:{
   '4':100,
 }
-
 })
-
-G.post({
-	dp:"test"
-})
-
-G.post({
-	dp:"1"
-})
-
 */
+
+//G.post({
+	//dp:"test"
+//})
+
+//G.post({
+	//dp:"1"
+//})
+
+
 export default GA

@@ -14,7 +14,7 @@ const _default = {
   rest:'',
   wxRequestTimeout:2000,
   enableLogger:true,
-  validateParams:true,
+  validateParams:false,
   LoggerName:"gaLog",
 };
 

@@ -91,9 +91,9 @@
    };
    }
 
-  impresstion(obj,cd,cm){
-      if(!obj.hasOwnProperty("impresstion")) return {}
-      if(!Array.isArray(obj.impresstion)) throw new Error("impresstion must be a object array");
+  impressions(obj,cd,cm){
+      if(!obj.hasOwnProperty("impressions")) return {}
+      if(!Array.isArray(obj.impressions)) throw new Error("impressions must be a object array");
       let pcd = {
         ..._default.productScopeCD,
         ...cd
@@ -104,8 +104,8 @@
         ...cm
       }
       let product = {}
-        let ilLen = impressionListIndex(obj.impresstion).get("type")
-        let ilMap = impressionListIndex(obj.impresstion)
+        let ilLen = impressionListIndex(obj.impressions).get("type")
+        let ilMap = impressionListIndex(obj.impressions)
         ilMap.delete("type")
         //has list on the object
         if(ilLen == "every"){
@@ -113,7 +113,7 @@
             product[`il${ls}nm`]=id
           }
 
-            for (let [i,v] of obj.impresstion.entries()){
+            for (let [i,v] of obj.impressions.entries()){
 
               let listIndex = ilMap.get(v.list) || i+1
               if(v.hasOwnProperty('name')){
@@ -172,7 +172,7 @@
               product[`il${ls}nm`]=id
             }
 
-            for (let [i,v] of obj.impresstion.entries()){
+            for (let [i,v] of obj.impressions.entries()){
               let listIndex = ilMap.get(v.list) || ilMap.get("_not_set_")
               if(v.hasOwnProperty('name')){
                 product[`il${listIndex}pi${i+1}nm`] = v['name']
@@ -230,7 +230,7 @@
         return product
       }else{
           // no list on the object
-          for (let [i,v] of obj.impresstion.entries()){
+          for (let [i,v] of obj.impressions.entries()){
           let listIndex =  1
           if(v.hasOwnProperty('name')){
             product[`il${listIndex}pi${i+1}nm`] = v['name']
@@ -416,9 +416,10 @@
 
     checkEEC(obj,cd,cm){
 
-      if(obj.hasOwnProperty('impresstion')){
-        var imp = this.impresstion(obj,cd,cm)
+      if(obj.hasOwnProperty("impressions")){
+        var imp = this.impressions(obj,cd,cm)
       }
+
 
       if(obj.hasOwnProperty("promotions")){
         var promo = this.promotions(obj,cd,cm)

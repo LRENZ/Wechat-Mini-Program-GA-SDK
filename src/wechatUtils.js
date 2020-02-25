@@ -67,8 +67,31 @@ const SceneMapping = {
     1097: "微信支付签约页",
     1099: "页面内嵌插件",
     1102: "公众号 profile 页服务预览",
+    1103:"发现栏小程序主入口，「我的小程序」列表（基础库2.2.4版本起废弃）",
+    1104: "微信聊天主界面下拉，「我的小程序」栏（基础库2.2.4版本起废弃）",
+    1106:"聊天主界面下拉，从顶部搜索结果页，打开小程序",
+    1107: "订阅消息，打开小程序",
+    1113:"安卓手机负一屏，打开小程序（三星）",
+    1114:"安卓手机侧边栏，打开小程序（三星）",
+    1124:"扫“一物一码”打开小程序",
+    1125:"长按图片识别“一物一码”",
+    1126:"扫描手机相册中选取的“一物一码”",
+    1129:"微信爬虫访问 详情",
+    1131:"浮窗打开小程序",
+    1146:"地理位置信息打开出行类小程序",
+    1148:"1148",
     default:"unknow scene value"
   };
+  /*
+ var m =[{
+   inputRegex:".*",
+   outputName:"'test'"
+ },
+ {
+ default:"others"
+}
+]*/
+
 
 
   class Mapping {
@@ -81,9 +104,9 @@ const SceneMapping = {
           return this.map
       }
       Mapping(map,input){
-        const current = map.find(item => input.match(new RegExp(item.inputRegex,"i"))) || {}
+        const current = map.find(item => input.match(new RegExp(item.inputRegex,"i"))) || map.find(n=>n.default)|| {}
         this.currentMap = current
-        this.currentOutput =  current.outputName
+        this.currentOutput =  current.outputName || current.default
         return current.outputName || input
       }
 
@@ -112,9 +135,10 @@ class wechatUtils{
     return false
   }
 
-  mappingSceneToCN(num){
+  mappingSceneToCN(num, mapping){
+    let m = mapping || this.SMapping
     if(this.onWechat){
-      return this.SMapping[num] || this.SMapping['default']
+      return m[num] || m['default']
     }
     return ''
   }

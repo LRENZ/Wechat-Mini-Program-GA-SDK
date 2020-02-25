@@ -13,11 +13,12 @@ class GA{
     this.default = this.create(options)
    this.interceptors = {
     request: new Interceptor(),
-  response: new Interceptor(),
+  //response: new Interceptor(),
 }
 
     this.validation = new validation()
     this.res = new Request(this.default)
+    this.log = this.getLog()
   }
 
   getLog(){
@@ -35,24 +36,23 @@ class GA{
   }
 
   getLogByHitId(id){
-    let l = this.getLog()
-    let lobj = l.filter(n => n['hitID'] == id)
-    return lobj[0] || undefined
+    let lobj = this.log.filter(n => n['hitID'] == id)
+    return lobj || undefined
   }
 
   removeLogByHitId(id){
-    let l = this.getLog()
-    let lobj = l.filter(n => n['hitID'] != id)
+    let lobj = this.log.filter(n => n['hitID'] != id)
     this.setLog(lobj)
     return lobj
   }
+
 
   setLog(log){
     if( typeof wx == "object"){
       let t =wx.setStorage({key:this.default.LoggerName,data:log})
       return t
     }
-    console.log("test")
+
     if(!!document.URL){
       try{
         return  window.localStorage.setItem(this.default.LoggerName,JSON.stringify(log));
@@ -164,7 +164,6 @@ request(options){
       delete cc.data.productScopeCM
     }
   let eecobj = eec.checkEEC(cc.data,cogCd,cogCm)
-
   cc.data = Object.assign(cc.data,eecobj)
   if(cc.data.hasOwnProperty("products")){
     delete cc.data.products
@@ -174,8 +173,8 @@ request(options){
     delete cc.data.promotions
   }
 
-  if(cc.data.hasOwnProperty("impresstion")){
-    delete cc.data.impresstion
+  if(cc.data.hasOwnProperty("impressions")){
+    delete cc.data.impressions
   }
 
    if(cc.validateParams){

@@ -346,18 +346,18 @@ function () {
       };
     }
   }, {
-    key: "impresstion",
-    value: function impresstion(obj, cd, cm) {
-      if (!obj.hasOwnProperty("impresstion")) return {};
-      if (!Array.isArray(obj.impresstion)) throw new Error("impresstion must be a object array");
+    key: "impressions",
+    value: function impressions(obj, cd, cm) {
+      if (!obj.hasOwnProperty("impressions")) return {};
+      if (!Array.isArray(obj.impressions)) throw new Error("impressions must be a object array");
 
       var pcd = _objectSpread({}, _config__WEBPACK_IMPORTED_MODULE_0__["default"].productScopeCD, {}, cd);
 
       var pcm = _objectSpread({}, _config__WEBPACK_IMPORTED_MODULE_0__["default"].productScopeCM, {}, cm);
 
       var product = {};
-      var ilLen = impressionListIndex(obj.impresstion).get("type");
-      var ilMap = impressionListIndex(obj.impresstion);
+      var ilLen = impressionListIndex(obj.impressions).get("type");
+      var ilMap = impressionListIndex(obj.impressions);
       ilMap["delete"]("type"); //has list on the object
 
       if (ilLen == "every") {
@@ -393,7 +393,7 @@ function () {
         var _iteratorError7 = undefined;
 
         try {
-          for (var _iterator7 = obj.impresstion.entries()[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+          for (var _iterator7 = obj.impressions.entries()[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
             var _step7$value = _slicedToArray(_step7.value, 2),
                 i = _step7$value[0],
                 v = _step7$value[1];
@@ -484,7 +484,7 @@ function () {
             var _iteratorError9 = undefined;
 
             try {
-              for (var _iterator9 = obj.impresstion.entries()[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+              for (var _iterator9 = obj.impressions.entries()[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
                 var _step9$value = _slicedToArray(_step9.value, 2),
                     _i5 = _step9$value[0],
                     _v3 = _step9$value[1];
@@ -578,7 +578,7 @@ function () {
         var _iteratorError10 = undefined;
 
         try {
-          for (var _iterator10 = obj.impresstion.entries()[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+          for (var _iterator10 = obj.impressions.entries()[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
             var _step10$value = _slicedToArray(_step10.value, 2),
                 _i6 = _step10$value[0],
                 _v4 = _step10$value[1];
@@ -816,8 +816,8 @@ function () {
   }, {
     key: "checkEEC",
     value: function checkEEC(obj, cd, cm) {
-      if (obj.hasOwnProperty('impresstion')) {
-        var imp = this.impresstion(obj, cd, cm);
+      if (obj.hasOwnProperty("impressions")) {
+        var imp = this.impressions(obj, cd, cm);
       }
 
       if (obj.hasOwnProperty("promotions")) {
@@ -1058,7 +1058,7 @@ var _default = {
   rest: '',
   wxRequestTimeout: 2000,
   enableLogger: true,
-  validateParams: true,
+  validateParams: false,
   LoggerName: "gaLog"
 };
 /* harmony default export */ __webpack_exports__["default"] = (_default);
@@ -1117,11 +1117,12 @@ function () {
     this.weUtils = new _wechatUtils__WEBPACK_IMPORTED_MODULE_7__["default"]();
     this["default"] = this.create(options);
     this.interceptors = {
-      request: new _Interceptor__WEBPACK_IMPORTED_MODULE_1__["default"](),
-      response: new _Interceptor__WEBPACK_IMPORTED_MODULE_1__["default"]()
+      request: new _Interceptor__WEBPACK_IMPORTED_MODULE_1__["default"]() //response: new Interceptor(),
+
     };
     this.validation = new _validation__WEBPACK_IMPORTED_MODULE_3__["default"]();
     this.res = new _request__WEBPACK_IMPORTED_MODULE_2__["default"](this["default"]);
+    this.log = this.getLog();
   }
 
   _createClass(GA, [{
@@ -1145,17 +1146,15 @@ function () {
   }, {
     key: "getLogByHitId",
     value: function getLogByHitId(id) {
-      var l = this.getLog();
-      var lobj = l.filter(function (n) {
+      var lobj = this.log.filter(function (n) {
         return n['hitID'] == id;
       });
-      return lobj[0] || undefined;
+      return lobj || undefined;
     }
   }, {
     key: "removeLogByHitId",
     value: function removeLogByHitId(id) {
-      var l = this.getLog();
-      var lobj = l.filter(function (n) {
+      var lobj = this.log.filter(function (n) {
         return n['hitID'] != id;
       });
       this.setLog(lobj);
@@ -1171,8 +1170,6 @@ function () {
         });
         return t;
       }
-
-      console.log("test");
 
       if (!!document.URL) {
         try {
@@ -1312,8 +1309,8 @@ function () {
         delete cc.data.promotions;
       }
 
-      if (cc.data.hasOwnProperty("impresstion")) {
-        delete cc.data.impresstion;
+      if (cc.data.hasOwnProperty("impressions")) {
+        delete cc.data.impressions;
       }
 
       if (cc.validateParams) {
@@ -1504,6 +1501,7 @@ let config = {
     //config.data.dp = "/test"
     return config
   },
+  debug:true,
   data:{  //common request payload
     v:1,
     cid:1234556,
@@ -1546,6 +1544,25 @@ G.post({
   ec:"test",
   ea:"wechatSDK",
   pa:"detail",
+  impressions:[{
+      "id": "b55da",
+      "name": "Flexigen T-Shirt",
+      "price": "16.00",
+      "brand": "Flexigen",
+      "category": "T-Shirts",
+      "position": 0,
+	  "list": "top10"
+    },
+    {
+      "id": "f6be8",
+      "name": "Comverges T-Shirt",
+      "price": "33.00",
+      "brand": "Comverges",
+      "category": "T-Shirts",
+      "position": 1,
+	  "list": "top10"
+  }],
+
   "products": [
     {
       "id": "bc823",
@@ -1579,18 +1596,14 @@ productScopeCD:{
 productScopeCM:{
   '4':100,
 }
-
 })
-
-G.post({
-	dp:"test"
-})
-
-G.post({
-	dp:"1"
-})
-
 */
+//G.post({
+//dp:"test"
+//})
+//G.post({
+//dp:"1"
+//})
 
 /* harmony default export */ __webpack_exports__["default"] = (_ga__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
@@ -1859,7 +1872,7 @@ function () {
           }
 
           if (!!options.onSuccess) {
-            options.onSuccess(options);
+            options.onSuccess(options, res);
           }
         },
         fail: function fail(res) {
@@ -1882,7 +1895,7 @@ function () {
           }
 
           if (!!options.onError) {
-            options.onError(options);
+            options.onError(options, res);
           }
         }
       });
@@ -1948,7 +1961,7 @@ function () {
     _classCallCheck(this, validation);
 
     this.v = this.init();
-    this.requireList = ['tid', 'v']; //this.anyList = [['dp','dl','dh']]
+    this.requireList = ['tid', 'v', 'cid']; //this.anyList = [['dp','dl','dh']]
 
     this.regexL = {
       "tid": "UA-[0-9]*-[0-9]*"
@@ -2241,8 +2254,30 @@ var SceneMapping = {
   1097: "微信支付签约页",
   1099: "页面内嵌插件",
   1102: "公众号 profile 页服务预览",
+  1103: "发现栏小程序主入口，「我的小程序」列表（基础库2.2.4版本起废弃）",
+  1104: "微信聊天主界面下拉，「我的小程序」栏（基础库2.2.4版本起废弃）",
+  1106: "聊天主界面下拉，从顶部搜索结果页，打开小程序",
+  1107: "订阅消息，打开小程序",
+  1113: "安卓手机负一屏，打开小程序（三星）",
+  1114: "安卓手机侧边栏，打开小程序（三星）",
+  1124: "扫“一物一码”打开小程序",
+  1125: "长按图片识别“一物一码”",
+  1126: "扫描手机相册中选取的“一物一码”",
+  1129: "微信爬虫访问 详情",
+  1131: "浮窗打开小程序",
+  1146: "地理位置信息打开出行类小程序",
+  1148: "1148",
   "default": "unknow scene value"
 };
+/*
+var m =[{
+ inputRegex:".*",
+ outputName:"'test'"
+},
+{
+default:"others"
+}
+]*/
 
 var Mapping =
 /*#__PURE__*/
@@ -2264,9 +2299,11 @@ function () {
     value: function Mapping(map, input) {
       var current = map.find(function (item) {
         return input.match(new RegExp(item.inputRegex, "i"));
+      }) || map.find(function (n) {
+        return n["default"];
       }) || {};
       this.currentMap = current;
-      this.currentOutput = current.outputName;
+      this.currentOutput = current.outputName || current["default"];
       return current.outputName || input;
     }
   }, {
@@ -2310,9 +2347,11 @@ function () {
     }
   }, {
     key: "mappingSceneToCN",
-    value: function mappingSceneToCN(num) {
+    value: function mappingSceneToCN(num, mapping) {
+      var m = mapping || this.SMapping;
+
       if (this.onWechat) {
-        return this.SMapping[num] || this.SMapping['default'];
+        return m[num] || m['default'];
       }
 
       return '';

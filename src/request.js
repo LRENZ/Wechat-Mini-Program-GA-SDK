@@ -127,7 +127,7 @@ weRequest(options){
        })
      }
        if(!!options.onSuccess){
-         options.onSuccess(options)
+         options.onSuccess(options,res)
        }
      },
      fail(res){
@@ -149,7 +149,7 @@ weRequest(options){
        })
      }
        if(!!options.onError){
-         options.onError(options)
+         options.onError(options,res)
        }
 
      }
