@@ -1,8 +1,22 @@
 {
-  "name": "Wechat-Mini-Program-GA-SDK",
+  "name": "wechat-mini-program-ga-sdk",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/LRENZ/Wechat-Mini-Program-GA-SDK.git",
+  "description": "Integrate Google Analytics with Wechat Mini Program via Measurement Protocol",
+  "keywords": [
+    "Google Analytics",
+    "WeChat",
+    "mini-program",
+    "Wechat Mini Program",
+    "wepy",
+    "mpvue",
+    "taro",
+    "Measurement Protocol"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LRENZ/Wechat-Mini-Program-GA-SDK.git"
+  },
   "author": "lrenz",
   "license": "MIT",
   "scripts": {
@@ -16,5 +30,10 @@
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/LRENZ/Wechat-Mini-Program-GA-SDK/issues"
+  },
+  "homepage": "https://github.com/LRENZ/Wechat-Mini-Program-GA-SDK#readme",
+  "devDependencies": {}
 }

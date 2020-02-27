@@ -20,7 +20,11 @@
 ```js
 Const GA = require('./GA/ga.js').default;
 ```
+或者通过 npm 安装
 
+```sh
+npm install wechat-mini-program-ga-sdk
+```
 ### 手动编译
 
 手动编译需要先安装以下library
@@ -86,7 +90,7 @@ wx.ga = GA
 ```
 
 **Track Pageview**
-
+追踪 pageview 需要在页面 出现的时候传入相应的参数.
 ```js
 GA.post({
   dp: '/home'
@@ -94,7 +98,7 @@ GA.post({
 ```
 
 **Track Event**
-
+追踪 Event 需要在事件触发的时候传入相应的参数.
 ```js
 GA.post({
   t:'event',
@@ -213,11 +217,11 @@ GA.post({
         "position": "4"
     }, ],
     productScopeCD: {
-        '3': 'custom dimension3',  // cdIndex : cdValue
+        '3': 'custom dimension3',  // cd Index : cd Value
         '4': "custom dimension3"
     },
     productScopeCM: {
-        '2': 100,  // cmIndex : cmValue
+        '2': 100,  // cm Index : cm Value
     }
 })
 ```
@@ -228,7 +232,8 @@ GA.post({
 
 Enhance Ecommerce 的功能也是遵循 Mearseurement protocol 的规范实现的. SDK 在此基础上增加了对 products/impressions/promotions 的支持, 以提高易用性. 请注意, 不要把products 相关的信息定义到 config 里, 最佳做法是在特定页面把 products/impressions/promotions 相关数据手动传入.
 
-- ** Details**
+- **Details**
+追踪 Enhance Ecommerce details 需要定义参数 pa 和对应的 products
 ```js
 GA.post({
     dp: "/pdp",
@@ -243,7 +248,8 @@ GA.post({
 })
 ```
 
-- ** Add to cart**
+- **Add to cart**
+追踪 Enhance Ecommerce Add to cart 需要定义参数 pa 和对应的 products
 ```js
 GA.post({
     dp: "/cart",
@@ -258,7 +264,9 @@ GA.post({
 })
 ```
 
-- ** Remove from cart**
+- **Remove from cart**
+
+追踪 Enhance Ecommerce Remove from cart 需要定义参数 pa 和对应的 products
 ```js
 GA.post({
     dp: "/cart",
@@ -274,7 +282,8 @@ GA.post({
 ```
 
 
-- ** Checkout**
+- **Checkout**
+追踪 Enhance Ecommerce Checkout 需要定义参数 pa 和对应的 products 以及 cos (checkout step)
 ```js
 GA.post({
     dp: "/cart",
@@ -290,8 +299,8 @@ GA.post({
 })
 ```
 
-- ** Checkout option**
-
+- **Checkout option**
+追踪 Enhance Ecommerce Checkout option 需要定义参数 pa 和对应的 cos 值
 ```js
 GA.post({
      t: "event",
@@ -304,8 +313,8 @@ GA.post({
 ```
 
 
-- ** Transaction**
-
+- **Transaction**
+追踪 Enhance Ecommerce Checkout option 需要定义参数 ti ,tt, 以及对应的结账 products
 ```js
 GA.post({
     dp: "/thankyou",
@@ -325,8 +334,8 @@ GA.post({
 })
 ```
 
-- ** Refund**
-
+- **Refund**
+追踪 Enhance Ecommerce Checkout option 需要定义参数 ti ,tt, 以及对应的结账 products
 ```js
 GA.post({
     dp: "/refund",
@@ -340,13 +349,12 @@ GA.post({
 ```
 
 
-- ** Impression**
+- **Impression**
 
-
+追踪 Enhance Ecommerce Checkout option 需要传入对应的的展示商品
 ```js
 GA.post({
     dp: "/top10Tshirt",
-    pa: "refund",
     impresstions: [{
             "id": "b55da",
             "name": "Flexigen T-Shirt",
@@ -370,8 +378,9 @@ GA.post({
 ```
 
 
-- ** Impression click**
+- **Impression click**
 
+追踪 Enhance Ecommerce Checkout 需要定义参数 pa 和对应的 products
 ```js
 GA.post({
     dp: "/top10Tshirt",
@@ -388,8 +397,8 @@ GA.post({
 })
 ```
 
-- ** Promotion**
-
+- **Promotion**
+追踪 Enhance Ecommerce Checkout 需要定义对应的 promotions
 ```js
 GA.post({
     dp: "/top10Tshirt",
@@ -402,7 +411,9 @@ GA.post({
 })
 ```
 
-- ** Promotion click**
+- **Promotion click**
+
+追踪 Enhance Ecommerce Checkout 需要定义对应的被点击的 promotions 和参数 promoa
 ```js
 GA.post({
     dp: "/top10Tshirt",
@@ -468,6 +479,8 @@ GA.post({
     ]
 })
 ```
+
+
 
 ## Media Tracking
 对于 GA UTM tracking, 同样需要提前定义相关参数,例如以下示例.
@@ -563,7 +576,72 @@ GA.interceptors.request.use(function(config) { // push a handler function before
 
 ```
 
+* #### 页面劫持自动发送 pageView
 
+小程序有[生命周期](http://https://developers.weixin.qq.com/miniprogram/dev/framework/app-service/page.html "生命周期")的概念,在启动过程中有不同的阶段用于不同的处理. pageview应该在 onShow 触发最为合适.
+
+小程序的开发构架是每个页面都有独立的启动阶段,那么对应 pageview 埋点而言, 就要在手动的在每个页面的 onShow 里调用相应的 pageview 代码. 这在页面很多的时候会显得不易维护且相对麻烦.  小程序的 Page 对象 是可以在每个页面共享的, 所以理论上我们可以通过劫持 Page 来实现自动埋点.
+
+```js
+const originPage = Page;
+
+Page = (page) => {
+  const originMethod = page['onShow'];
+  page['onShow'] = function () {
+    GA.post({
+      dp: this.route,
+    })
+    return originMethod();
+  }
+  return originPage(page);
+};
+```
+
+以上代码会劫持每个页面的 page 函数,并在之间先执行 pageview 上报,再继续执行原来每个页面的定义的 onShow 函数. 每当每个页面的 Page 渲染的时候便可以实现自动的上报.
+
+但是这个做法也会造成一些问题. 例如, 假设我需要在一些特殊的页面多发几个 CD 呢? 自动上报的并不包含这些 cd. 一个好的解决方案是, 在 config 里定义所需全部变量, 在不同页面,如果有值返回 true, 没有则返回 false. 请求在发送前会将所有为 false 的参数 filter out
+```js
+
+var config = {
+    data: { //common request payload
+        v: 1,
+        cid: 1234556,
+        tid: "UA-71412438-1",
+        dp: getPage(),
+        ds: "wechat",
+        t: "pageview",
+		cd1: getCD1(),
+		cd2: getCD2()
+    },
+    debug: true,
+    validateHit: true, // will send to the vvalidation endpoint(optional)
+    maxLogLength: 10,
+    enableLogger: true,
+}
+```
+
+另一种方案是在 onShow 函数传递相应的参数
+```js
+
+
+const originPage = Page;
+
+Page = (page) => {
+  const originMethod = page['onShow'];
+  page['onShow'] = function (data) {
+    GA.post({
+      dp: this.route,
+	  cd1: data.cd1,
+	  cd2: data.cd2,
+    })
+    return originMethod();
+  }
+  return originPage(page);
+};
+
+```
+
+如果在页面不多的情况下, 手动埋点依旧是最佳的方式.
 
 
 
@@ -613,6 +691,7 @@ SDK 内置实现了一个简易的用于验证参数的对象. 可用于自定�
 | Require Args | Expected Value |  Return Value | Comment |
 |:----:  | :----: |:----: |:----: |
 | String | "dp", "ua"... | object | 检验通过则返回检验对象,否则报错|
+
 使用以上方法可以增加需要检查的必须参数. 以下例子用于定义了对 dp 是否存在的检查
 
 ```js
@@ -670,7 +749,7 @@ GA.interceptors.request.use(function(res) { // push a handler function before se
 ### [GA].weUtils
 内置的小程序工具函数.
 
--** [GA].weUtils.map**
+-**[GA].weUtils.map**
 
 内置的 regex table, 可用于对数据进行额外的 regex table 的处理
 
@@ -697,7 +776,7 @@ let tid = GA.weUtils.map(m,"dl")
 console.log(tid)
 ```
 
--** [GA].weUtils.mappingSceneToCN**
+-**[GA].weUtils.mappingSceneToCN**
 
 内置工具将场景值转换成中文
 
@@ -753,13 +832,13 @@ console.log(log)
 ### config
 config 用于管理实例的配置, 需要在实例化时传入,不允许为空. 默认有以下配置
 
-- **data** :  需要在默认配置中发送到 GA 的数据.需要以对象的格式传入
+- **data**:  需要在默认配置中发送到 GA 的数据.需要以对象的格式传入
 
 | Params | Type |defalut  Value | Expected Value | Comment |
 |:----: |:----:  | :----: |:----: |:----: |
 | data | Object | empty |  object | 比如以对象按照键值传入|
 
-- **proxyURL** :  微信小程序不能直接发数据到 GA 的 endpoint, 因为需要一个转发服务器用于转发相应的请求到 GA 的服务器. 这个参数在生产环境的时候是必须要设置的
+- **proxyURL**:  微信小程序不能直接发数据到 GA 的 endpoint, 因为需要一个转发服务器用于转发相应的请求到 GA 的服务器. 这个参数在生产环境的时候是必须要设置的
 
 | Params | Type |defalut  Value | Expected Value | Comment |
 |:----: |:----:  | :----: |:----: |:----: |
@@ -767,63 +846,63 @@ config 用于管理实例的配置, 需要在实例化时传入,不允许为空.
 
 
 
-- **debug** : 参数用与决定实例是否开启调试模式. 主要用户在开发阶段验证参数是否可以直接被 GA 收到. 当没有 制定 proxyURL 并且 debug 为 true 的时候, 默认发送的 endpoint 为 https://www.google-analytics.com/collect
+- **debug**: 参数用与决定实例是否开启调试模式. 主要用户在开发阶段验证参数是否可以直接被 GA 收到. 当没有 制定 proxyURL 并且 debug 为 true 的时候, 默认发送的 endpoint 为 https://www.google-analytics.com/collect
 
 | Params | Type |defalut  Value | Expected Value | Comment |
 |:----: |:----:  | :----: |:----: |:----: |
 | debug | boolean | false |  true,false | 主要用于决定发送数据的 endpoint |
 
-- ** validateHit ** : 此参数设置为true, 则发送数据的endpoint 将会设置成 https://www.google-analytics.com/debug/collect . 可用于检验发送给 GA 参数是否合规, GA 是否能正确的解析参数. 关于此 endpoint 请请参阅 [Measurement Protocol debug](https://developers.google.com/analytics/devguides/collection/protocol/v1/validating-hits "Measurement Protocol debug")
+- **validateHit **: 此参数设置为true, 则发送数据的endpoint 将会设置成 https://www.google-analytics.com/debug/collect . 可用于检验发送给 GA 参数是否合规, GA 是否能正确的解析参数. 关于此 endpoint 请请参阅 [Measurement Protocol debug](https://developers.google.com/analytics/devguides/collection/protocol/v1/validating-hits "Measurement Protocol debug")
 
 | Params | Type |defalut  Value | Expected Value | Comment |
 |:----: |:----:  | :----: |:----: |:----: |
 | validateHit | boolean | false |  true,false | 主要用于决定发送数据的 endpoint |
 
 
-- ** enableLogger **  : 此参数用于决定是否开启 Logger 用于记录发送的请求. 发送的请求的会存在 localStorage (web) 或者是 Storage (wechat)
+- **enableLogger ** : 此参数用于决定是否开启 Logger 用于记录发送的请求. 发送的请求的会存在 localStorage (web) 或者是 Storage (wechat)
 
 | Params | Type |defalut  Value | Expected Value | Comment |
 |:----: |:----:  | :----: |:----: |:----: |
 | enableLogger  | boolean | true |  true,false | 是否启用 Logger |
 
 
-- ** LoggerName **  : 此参数用于决定存在 localStorage (web) 或者 Storage (wechat) 的键值.  如果有多个实例, 建议为每个实例设置不同 LoggerName
+- **LoggerName ** : 此参数用于决定存在 localStorage (web) 或者 Storage (wechat) 的键值.  如果有多个实例, 建议为每个实例设置不同 LoggerName
 
 | Params | Type |defalut  Value | Expected Value | Comment |
 |:----: |:----:  | :----: |:----: |:----: |
 | LoggerName  | String | gaLog |  "PageViewLog", "EventLog" | 命名存在本地的Logger |
 
-- ** wxRequestTimeout**  : 此参数用于请求的 微信小程序 timeout 间隔.  
+- **wxRequestTimeout** : 此参数用于请求的 微信小程序 timeout 间隔.  
 
 | Params | Type |defalut  Value | Expected Value | Comment |
 |:----: |:----:  | :----: |:----: |:----: |
 | wxRequestTimeout  | Number | 2000 |  3000,4000 | 单位是毫秒 |
 
-- ** transaferRequest**  : 在发送 Request 之前进行额外的处理.
+- **transaferRequest** : 在发送 Request 之前进行额外的处理.
 
 | Params | Type |defalut  Value | Expected Value | Comment |
 |:----: |:----:  | :----: |:----: |:----: |
-| transaferRequest  | empty | function |  function | transaferRequest 默认的参数是整个对象的配置<br></br发送到>发送到 的数据存在 config.data <br>必须返回 config (object) |
+| transaferRequest(config:object)  | empty | function |  function | transaferRequest 默认的参数是整个对象的配置<br>发送到 的数据存在 config.data <br>必须返回 config (object) |
 
-- ** transferResponse**  : 在收到 Response 之后进行额外的处理.
-
-| Params | Type |defalut  Value | Expected Value | Comment |
-|:----: |:----:  | :----: |:----: |:----: |
-| transferResponse  | empty | function |  function | transferResponse 默认的参数是返回的reponse (object)  |
-
-
-- ** onSuccess**  : 发送成功之后的回调函数
+- **transferResponse** : 在收到 Response 之后进行额外的处理.
 
 | Params | Type |defalut  Value | Expected Value | Comment |
 |:----: |:----:  | :----: |:----: |:----: |
-| onSuccess  | empty | function |  function | onSuccess 默认的参数 <br></broptions:>options: Object<br>res: Object<br></brres:返回的请求>  |
+| transferResponse(res:object)  | empty | function |  function | transferResponse 默认的参数是返回的reponse (object)  |
 
 
-- ** onError**  : 发送失败之后的回调函数.  
+- **onSuccess** : 发送成功之后的回调函数
 
 | Params | Type |defalut  Value | Expected Value | Comment |
 |:----: |:----:  | :----: |:----: |:----: |
-| onError  | empty | function |  function | onError 默认的参数 <br></broptions:>options: Object<br>res: Object<br></brres:返回的请求>  |
+| onSuccess(options:object,res:object)  | empty | function |  function | onSuccess 默认的参数 <br>options请求的对象<br>res:返回的请求 |
+
+
+- **onError** : 发送失败之后的回调函数.  
+
+| Params | Type |defalut  Value | Expected Value | Comment |
+|:----: |:----:  | :----: |:----: |:----: |
+| onError(options:object,res:object)  | empty | function |  function | onError 默认的参数 <br>options: 请求的对象<br>res:返回的请求 |
 
 Config 必须在创建实例时传入,以下是一个示例
 
@@ -873,7 +952,7 @@ const GA = new GA(config)
 
 ## Authors
 
-**LRENZ** - *A Tracking Lover* - [Linkedin](https://www.linkedin.com/in/renzhong-liu-668006169/)
+**LRENZ**- *simple is less* - [Linkedin](https://www.linkedin.com/in/renzhong-liu-668006169/)
 
 
  ## Reference
