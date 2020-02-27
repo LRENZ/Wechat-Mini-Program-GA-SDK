@@ -1,6 +1,6 @@
 {
   "name": "wechat-mini-program-ga-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "description": "Integrate Google Analytics with Wechat Mini Program via Measurement Protocol",
   "keywords": [
