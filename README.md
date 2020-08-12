@@ -67,10 +67,10 @@ const config = {
     dh:'www.test.com',
     ds: "wechat",    //  data source
     t:"pageview",  //  track type
-    proxyURL : "YOUR_PROXY_URL" // Wechat mini program is not allowed to send to GA server directly, you will require a middle server to forward the hits
   },
   maxLogLength:10,
   enableLogger: true,
+  proxyURL : "YOUR_PROXY_URL" // Wechat mini program is not allowed to send to GA server directly, you will require a middle server to forward the hits
 }
 
 const GA = new GA(config)
@@ -122,11 +122,11 @@ const config = {
     dh:'www.test.com',
     ds: "wechat",    //  data source
     t:"pageview",  //  track type
-    proxyURL : "YOUR_PROXY_URL" // Wechat mini program is not allowed to send to GA server directly, you will require a middle server to forward the hits
   },
   maxLogLength:10,
   enableLogger: true,
-  LoggerName: 'pvLog'
+  LoggerName: 'pvLog',
+  proxyURL : "YOUR_PROXY_URL" // Wechat mini program is not allowed to send to GA server directly, you will require a middle server to forward the hits
 }
 
 const GAPvTracker = new GA(config)
